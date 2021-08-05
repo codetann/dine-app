@@ -25,7 +25,7 @@ const start = async () => {
     await db.sync();
     await db.authenticate();
     console.log(
-      `${chalk.blue("db")}     - database authentication was ${chalk.green(
+      `🗳️ ${chalk.blue(" db")}     - database authentication was ${chalk.green(
         "successfull"
       )}`
     );

@@ -9,15 +9,18 @@
 import bcrypt from "bcrypt";
 import { User } from "./index";
 
-const checkEmail = async (email) => {
-  const user = await User.findAll({
-    where: {
-      email: email,
-    },
-  });
-
-  if (user.length) return user;
-  if (!user.length) return false;
+const _checkEmail = async (email) => {
+  try {
+    const user = await User.findAll({
+      where: {
+        email: email,
+      },
+    });
+    if (user.length) return user;
+    if (!user.length) return false;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /**
@@ -33,19 +36,20 @@ export const insertNewUser = async (name, email, password) => {
   const salt = 10;
   const photo = "";
 
-  // check for email in database
-  const found = await checkEmail(email);
-  if (found) return { error: "Email already exists", status: 400, user: null };
-
-  // hash user password and save user to database
-  const hash = await bcrypt.hash(password, salt);
-  const user = await User.create({
-    name,
-    email,
-    password: hash,
-    photo,
-  });
-  if (user) return { error: null, status: 200, user: { name, email, photo } };
+  try {
+    const user = await _checkEmail(email);
+    if (user) throw new Error("email already exists");
+    const hash = await bcrypt.hash(password, salt);
+    const newUser = await User.create({
+      name,
+      email,
+      password: hash,
+      photo,
+    });
+    return newUser;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /**
@@ -57,15 +61,23 @@ export const insertNewUser = async (name, email, password) => {
  * @returns error message and status code
  */
 export const checkUser = async (email, password = false) => {
-  // check if email exists in database
-  const user = await checkEmail(email);
-  if (!user)
-    return { error: "Could not find user with that email", status: 400 };
-  const { name, photo } = user[0].dataValues;
-  // return just user info
-  if (!password) return user;
-  // check user password against hash
-  const isAuth = await bcrypt.compare(password, user[0].dataValues.password);
-  if (isAuth) return { error: null, status: 200, user: { name, email, photo } };
-  if (!isAuth) return { error: "Could not authorize user", status: 400 };
+  try {
+    const user = await _checkEmail(email);
+    if (!user) throw new Error("could not find email");
+    await bcrypt.compare(password, user[0].dataValues.password);
+    return user;
+  } catch (err) {
+    console.error(err);
+  }
+  // // check if email exists in database
+  // const user = await _checkEmail(email);
+  // if (!user)
+  //   return { error: "Could not find user with that email", status: 400 };
+  // const { name, photo } = user[0].dataValues;
+  // // return just user info
+  // if (!password) return user;
+  // // check user password against hash
+  // const isAuth = await bcrypt.compare(password, user[0].dataValues.password);
+  // if (isAuth) return { error: null, status: 200, user: { name, email, photo } };
+  // if (!isAuth) return { error: "Could not authorize user", status: 400 };
 };
