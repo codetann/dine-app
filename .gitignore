@@ -1,0 +1,10 @@
+node_modules
+
+# production client
+dist
+
+# production server
+server
+
+# dev database
+dev.sqlite
