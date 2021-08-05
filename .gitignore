@@ -8,3 +8,6 @@ server
 
 # dev database
 dev.sqlite
+
+# env
+.env
