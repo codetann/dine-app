@@ -16,8 +16,8 @@ const _checkEmail = async (email) => {
         email: email,
       },
     });
-    if (user.length) return user;
-    if (!user.length) return false;
+    if (user.length === 1) return user;
+    if (!user.length === 0) return false;
   } catch (err) {
     console.error(err);
   }
@@ -64,8 +64,9 @@ export const checkUser = async (email, password = false) => {
   try {
     const user = await _checkEmail(email);
     if (!user) throw new Error("could not find email");
-    await bcrypt.compare(password, user[0].dataValues.password);
-    return user;
+    const match = await bcrypt.compare(password, user[0].dataValues.password);
+    if (!match) throw new Error("password is incorrect");
+    if (match) return user;
   } catch (err) {
     console.error(err);
   }
