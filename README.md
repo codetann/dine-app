@@ -8,6 +8,8 @@ Install dependencies
 $ npm install
 ```
 
+In order to have the database work correctly, install SQLite on your local computer.
+
 ## Development
 
 Start dev server
