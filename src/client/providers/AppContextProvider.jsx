@@ -1,7 +1,5 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { createContext, useContext } from "react";
 import useAuth from "../hooks/useAuth";
-import useJwtCookie from "../hooks/useJwtCookie";
 import PropTypes from "prop-types";
 
 // initiallize context
@@ -11,13 +9,7 @@ const AppContext = createContext(null);
 export const useAppContext = () => useContext(AppContext);
 
 export default function AppContextProvider({ children }) {
-  const history = useHistory();
-  const cookie = useJwtCookie();
-  const { isAuth, login, signup, logout, jwt, email } = useAuth();
-
-  useEffect(() => {
-    if (jwt) return history.push("/dashboard");
-  }, []);
+  const { isAuth, login, signup, logout } = useAuth();
 
   const data = {
     isAuth,
