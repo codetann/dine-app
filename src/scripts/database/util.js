@@ -9,6 +9,7 @@
 import bcrypt from "bcrypt";
 import { User } from "./index";
 
+// checks a user email for login validation
 const _checkEmail = async (email) => {
   const user = await User.findAll({
     where: {
@@ -19,6 +20,7 @@ const _checkEmail = async (email) => {
   if (!user.length) throw "email already exists";
 };
 
+// validate to make sure no email exists while signing up
 const validateEmail = async (email) => {
   const user = await User.findAll({
     where: {
@@ -71,15 +73,4 @@ export const checkUser = async (email, password = false) => {
   } catch (err) {
     console.error(err);
   }
-  // // check if email exists in database
-  // const user = await _checkEmail(email);
-  // if (!user)
-  //   return { error: "Could not find user with that email", status: 400 };
-  // const { name, photo } = user[0].dataValues;
-  // // return just user info
-  // if (!password) return user;
-  // // check user password against hash
-  // const isAuth = await bcrypt.compare(password, user[0].dataValues.password);
-  // if (isAuth) return { error: null, status: 200, user: { name, email, photo } };
-  // if (!isAuth) return { error: "Could not authorize user", status: 400 };
 };

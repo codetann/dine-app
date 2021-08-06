@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Stack, FormControl, FormLabel, Input, Spacer } from "@chakra-ui/react";
 
 export default function NameInput({ first, last, handleChange }) {
@@ -16,3 +17,9 @@ export default function NameInput({ first, last, handleChange }) {
     </Stack>
   );
 }
+
+NameInput.propTypes = {
+  first: PropTypes.string,
+  last: PropTypes.string,
+  handleChange: PropTypes.func,
+};

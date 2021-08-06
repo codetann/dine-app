@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 export default function PasswordInput({
@@ -18,3 +19,9 @@ export default function PasswordInput({
     </FormControl>
   );
 }
+
+PasswordInput.propTypes = {
+  password: PropTypes.string,
+  confirm: PropTypes.bool,
+  handleChange: PropTypes.func,
+};

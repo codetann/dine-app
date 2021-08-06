@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   IconButton,
   HStack,
@@ -23,11 +23,6 @@ const LINKS = [
   { id: 1, text: "Home ", path: "/" },
   { id: 2, text: "Nearby", path: "/" },
   { id: 3, text: "Favorites", path: "/" },
-];
-
-const PROFILE_LINKS = [
-  { id: 1, text: "Profile", path: "/", variant: "ghost" },
-  { id: 2, text: "Sign Out", path: "/", variant: "solid", colorScheme: "red" },
 ];
 
 export default function MobileNav() {

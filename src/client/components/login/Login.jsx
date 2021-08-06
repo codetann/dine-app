@@ -11,7 +11,7 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-import { FaHamburger, FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaHamburger } from "react-icons/fa";
 import { useAppContext } from "../../providers/AppContextProvider";
 
 export default function Login() {

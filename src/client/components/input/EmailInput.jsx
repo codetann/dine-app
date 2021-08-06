@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 export default function EmailInput({ email, handleChange }) {
@@ -9,3 +10,8 @@ export default function EmailInput({ email, handleChange }) {
     </FormControl>
   );
 }
+
+EmailInput.propTypes = {
+  email: PropTypes.string,
+  handleChange: PropTypes.func,
+};

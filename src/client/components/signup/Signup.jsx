@@ -7,14 +7,9 @@ import {
   Heading,
   VStack,
   Text,
-  Input,
-  FormControl,
-  FormLabel,
-  Stack,
-  Spacer,
   Switch,
 } from "@chakra-ui/react";
-import { FaHamburger, FaGoogle, FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaHamburger } from "react-icons/fa";
 import { useAppContext } from "../../providers/AppContextProvider";
 import useFormValidate from "../../hooks/useFormValidate";
 import NameInput from "../input/NameInput";
