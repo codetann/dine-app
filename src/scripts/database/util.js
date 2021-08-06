@@ -10,17 +10,22 @@ import bcrypt from "bcrypt";
 import { User } from "./index";
 
 const _checkEmail = async (email) => {
-  try {
-    const user = await User.findAll({
-      where: {
-        email: email,
-      },
-    });
-    if (user.length === 1) return user;
-    if (!user.length === 0) return false;
-  } catch (err) {
-    console.error(err);
-  }
+  const user = await User.findAll({
+    where: {
+      email: email,
+    },
+  });
+  if (user.length) return user;
+  if (!user.length) throw "email already exists";
+};
+
+const validateEmail = async (email) => {
+  const user = await User.findAll({
+    where: {
+      email: email,
+    },
+  });
+  if (user.length) throw "email already exits";
 };
 
 /**
@@ -37,8 +42,7 @@ export const insertNewUser = async (name, email, password) => {
   const photo = "";
 
   try {
-    const user = await _checkEmail(email);
-    if (user) throw new Error("email already exists");
+    await validateEmail(email);
     const hash = await bcrypt.hash(password, salt);
     const newUser = await User.create({
       name,
