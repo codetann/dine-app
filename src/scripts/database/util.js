@@ -25,7 +25,7 @@ const validateEmail = async (email) => {
       email: email,
     },
   });
-  if (user.length) throw "email already exits";
+  if (user.length) throw new Error("email already exits");
 };
 
 /**
@@ -41,19 +41,16 @@ export const insertNewUser = async (name, email, password) => {
   const salt = 10;
   const photo = "";
 
-  try {
-    await validateEmail(email);
-    const hash = await bcrypt.hash(password, salt);
-    const newUser = await User.create({
-      name,
-      email,
-      password: hash,
-      photo,
-    });
-    return newUser;
-  } catch (err) {
-    console.error(err);
-  }
+  await validateEmail(email);
+
+  const hash = await bcrypt.hash(password, salt);
+  const user = await User.create({
+    name,
+    email,
+    password: hash,
+    photo,
+  });
+  return user;
 };
 
 /**

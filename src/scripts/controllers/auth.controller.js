@@ -36,6 +36,7 @@ export const signup = async (req, res) => {
     const { user } = await insertNewUser(name, email, password);
     res.status(200).json(user);
   } catch (error) {
+    console.log(error);
     res.status(400).send(error);
   }
 };
