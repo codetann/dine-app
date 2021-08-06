@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
 
   try {
     if (!name || !email || !password) throw new Error("missing values");
-    const { user } = await insertNewUser(name, email, password);
+    const user = await insertNewUser(name, email, password);
     res.status(200).json(user);
   } catch (error) {
     console.log(error);

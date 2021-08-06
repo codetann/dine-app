@@ -69,7 +69,7 @@ export const checkUser = async (email, password = false) => {
     if (!user) throw new Error("could not find email");
     const match = await bcrypt.compare(password, user[0].dataValues.password);
     if (!match) throw new Error("password is incorrect");
-    if (match) return user;
+    if (match) return user[0];
   } catch (err) {
     console.error(err);
   }
