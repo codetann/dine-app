@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import PropTypes from "prop-types";
 
@@ -9,13 +9,14 @@ const AppContext = createContext(null);
 export const useAppContext = () => useContext(AppContext);
 
 export default function AppContextProvider({ children }) {
-  const { isAuth, login, signup, logout } = useAuth();
+  const { isAuth, login, signup, logout, user } = useAuth();
 
   const data = {
     isAuth,
     login,
     signup,
     logout,
+    user,
   };
 
   return <AppContext.Provider value={data}>{children}</AppContext.Provider>;

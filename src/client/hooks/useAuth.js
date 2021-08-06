@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function useAuth() {
   const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState(null);
 
   /**
    * Function that logs in a user
@@ -17,8 +18,10 @@ export default function useAuth() {
       password,
     });
 
-    console.log(res);
-    if (res.status === 200) setIsAuth(true);
+    if (res.status === 200) {
+      setIsAuth(true);
+      setUser(res.data);
+    }
   };
 
   /**
@@ -34,8 +37,11 @@ export default function useAuth() {
       email,
       password,
     });
-    console.log(res);
-    if (res.status === 200) setIsAuth(true);
+
+    if (res.status === 200) {
+      setIsAuth(true);
+      setUser(res.data);
+    }
   };
 
   /**
@@ -47,5 +53,5 @@ export default function useAuth() {
     document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // delete cookie
   };
 
-  return { isAuth, login, logout, signup };
+  return { isAuth, login, logout, signup, user };
 }
