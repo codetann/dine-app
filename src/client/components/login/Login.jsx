@@ -17,7 +17,7 @@ import { useAppContext } from "../../providers/AppContextProvider";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { isAuth, login } = useAppContext();
+  const { login, isAuth } = useAppContext();
   const history = useHistory();
 
   useEffect(() => {

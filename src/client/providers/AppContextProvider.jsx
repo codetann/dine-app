@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
-import useAuth from "../hooks/useAuth";
+import React, { createContext, useContext, useEffect } from "react";
+import useApi from "../hooks/useApi";
 import PropTypes from "prop-types";
 
 // initiallize context
@@ -9,14 +9,15 @@ const AppContext = createContext(null);
 export const useAppContext = () => useContext(AppContext);
 
 export default function AppContextProvider({ children }) {
-  const { isAuth, login, signup, logout, user } = useAuth();
+  const { API, AUTH } = useApi();
 
   const data = {
-    isAuth,
-    login,
-    signup,
-    logout,
-    user,
+    isAuth: AUTH.isAuth,
+    login: AUTH.login,
+    signup: AUTH.signup,
+    logout: AUTH.logout,
+    user: AUTH.user,
+    updatePhoto: API.updateImage,
   };
 
   return <AppContext.Provider value={data}>{children}</AppContext.Provider>;

@@ -38,6 +38,7 @@ export default function MobileNav() {
     logout();
     history.push("/login");
   };
+  const linkProfile = () => history.push("/profile");
 
   if (!user) return <div>...Loading</div>;
   return (
@@ -117,6 +118,7 @@ export default function MobileNav() {
               w="100%"
               alignItems="center"
               justifyContent="flex-start"
+              onClick={linkProfile}
             >
               Profile
             </Button>

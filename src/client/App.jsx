@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
 
 /**
  * TODO | socket.io
@@ -26,6 +27,7 @@ export default function App() {
           <PublicRoute path="/signup" component={SignupPage} />
           <PublicRoute path="/login" component={LoginPage} />
           <PrivateRoute path="/dashboard" component={DashboardPage} />
+          <PrivateRoute path="/profile" component={ProfilePage} />
         </Switch>
       </Router>
     </VStack>
