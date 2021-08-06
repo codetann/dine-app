@@ -26,7 +26,7 @@ const LINKS = [
 ];
 
 export default function MobileNav() {
-  const { logout } = useAppContext();
+  const { logout, user } = useAppContext();
   const history = useHistory();
   const { isOpen, onToggle } = useDisclosure();
   const [isActive, setIsActive] = useState("Start");
@@ -39,6 +39,7 @@ export default function MobileNav() {
     history.push("/login");
   };
 
+  if (!user) return <div>...Loading</div>;
   return (
     <VStack
       zIndex="10"
@@ -103,10 +104,10 @@ export default function MobileNav() {
           {/* Profile Info */}
           <VStack w="100%">
             <HStack width="100%" justify="left" spacing="1rem">
-              <Avatar size="sm" />
+              <Avatar size="sm" src={user.photo} />
               <VStack align="left" spacing=".2rem">
-                <Heading size="sm">John Doe</Heading>
-                <Text fontSize="12px">john@example.com</Text>
+                <Heading size="sm">{user.name}</Heading>
+                <Text fontSize="12px">{user.email}</Text>
               </VStack>
             </HStack>
 
