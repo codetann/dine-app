@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { HStack, Button, Avatar } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 import { useAppContext } from "../../providers/AppContextProvider";
 
@@ -27,3 +28,7 @@ export default function UploadWidget({ setImage }) {
     </HStack>
   );
 }
+
+UploadWidget.propTypes = {
+  setImage: PropTypes.func,
+};
