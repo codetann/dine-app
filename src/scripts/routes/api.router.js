@@ -1,9 +1,8 @@
 import express from "express";
-import auth from "../middleware/auth";
-import API from "../controllers/api.controller";
+import { uploadPhoto } from "../controllers/api.controller";
 
 const router = express.Router();
 
-router.post("/user", auth, API.GET.dashboard);
+router.post("/upload/photo", uploadPhoto);
 
 export default router;

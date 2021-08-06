@@ -21,7 +21,7 @@ const _checkEmail = async (email) => {
 };
 
 // validate to make sure no email exists while signing up
-const validateEmail = async (email) => {
+const _validateEmail = async (email) => {
   const user = await User.findAll({
     where: {
       email: email,
@@ -43,7 +43,7 @@ export const insertNewUser = async (name, email, password) => {
   const salt = 10;
   const photo = "";
 
-  await validateEmail(email);
+  await _validateEmail(email);
 
   const hash = await bcrypt.hash(password, salt);
   const user = await User.create({
@@ -64,13 +64,17 @@ export const insertNewUser = async (name, email, password) => {
  * @returns error message and status code
  */
 export const checkUser = async (email, password = false) => {
-  try {
-    const user = await _checkEmail(email);
-    if (!user) throw new Error("could not find email");
-    const match = await bcrypt.compare(password, user[0].dataValues.password);
-    if (!match) throw new Error("password is incorrect");
-    if (match) return user[0];
-  } catch (err) {
-    console.error(err);
-  }
+  const user = await _checkEmail(email);
+  if (!user) throw new Error("could not find email");
+  const match = await bcrypt.compare(password, user[0].dataValues.password);
+  if (!match) throw new Error("password is incorrect");
+  if (match) return user[0];
+};
+
+export const updatePhoto = async (url, email) => {
+  const user = await _checkEmail(email);
+  if (!user) throw new Error("could not find user");
+  user[0].photo = url;
+  await user[0].save();
+  return user[0];
 };

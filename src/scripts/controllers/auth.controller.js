@@ -17,8 +17,9 @@ export const login = async (req, res) => {
     const user = await checkUser(email, password);
     if (!user) res.status(400).send("login failed");
     if (user) res.status(200).json(user);
-  } catch (err) {
-    res.status(400).send(err);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
   }
 };
 

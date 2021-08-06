@@ -1,18 +1,12 @@
-import { checkUser } from "../database/util.js";
+import { updatePhoto } from "../database/util.js";
 
-// POST ROUTES //
-const dashboard = async (req, res) => {
-  const { email } = req.body;
-
-  // find user in db | return user
-  const user = await checkUser(email);
-
-  // send user data to client
-  res.status(200).json(user);
-};
-
-export default {
-  POST: {
-    dashboard,
-  },
+export const uploadPhoto = async (req, res) => {
+  try {
+    const { email, url } = req.body;
+    const user = await updatePhoto(url, email);
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send(error);
+  }
 };

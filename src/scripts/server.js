@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 
 import indexRouter from "./routes/index.router";
 import authRouter from "./routes/auth.router";
+import apiRouter from "./routes/api.router";
 
 import io from "./sockets";
 import db from "./database";
@@ -32,6 +33,7 @@ io.start();
 // routes
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+app.use("/api", apiRouter);
 
 // server
 server.listen(port, () =>
