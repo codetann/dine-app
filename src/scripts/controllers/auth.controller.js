@@ -15,7 +15,8 @@ export const login = async (req, res) => {
   try {
     if (!email || !password) throw new Error("missing email / password");
     const user = await checkUser(email, password);
-    res.status(200).json(user);
+    if (!user) res.status(400).send("login failed");
+    if (user) res.status(200).json(user);
   } catch (err) {
     res.status(400).send(err);
   }
