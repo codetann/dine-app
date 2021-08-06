@@ -4,6 +4,7 @@ import http from "http";
 import cors from "cors";
 import chalk from "chalk";
 import cookieParser from "cookie-parser";
+import cookieSession from "cookie-session";
 
 import indexRouter from "./routes/index.router";
 import authRouter from "./routes/auth.router";
@@ -23,6 +24,7 @@ db.start();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, "../dist")));
 
 // socket.io
