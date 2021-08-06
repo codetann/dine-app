@@ -1,33 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
-
-// check if a cookie exists
-const _checkCookie = (cname) => {
-  const name = cname + "=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const ca = decodedCookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    if (ca[i].includes(name)) return ca[i].replace(name, "");
-  }
-  return null;
-};
 
 export default function useAuth() {
   const [isAuth, setIsAuth] = useState(false);
-  const [jwt, setJwt] = useState(null);
-  const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const token = _checkCookie("jwt"); // checks if cookie exists and returns it
-    const eCookie = _checkCookie("email");
-
-    if (!token) return;
-
-    if (token) {
-      setJwt(token);
-      setEmail(eCookie);
-    }
-  }, [isAuth]);
 
   /**
    * Function that logs in a user
@@ -42,17 +17,8 @@ export default function useAuth() {
       password,
     });
 
-    if (res.status === 200) {
-      const jwtCookie = `jwt=${res.data.token}; expires=Thu, 31 Dec 2100 12:00:00 UTC;`;
-      const emailCookie = `email=${email}; expires=Thu, 31 Dec 2100 12:00:00 UTC;`;
-
-      setIsAuth(true);
-      setEmail(email);
-
-      document.cookie = emailCookie;
-      document.cookie = jwtCookie;
-      console.log(res);
-    }
+    console.log(res);
+    if (res.status === 200) setIsAuth(true);
   };
 
   /**
@@ -81,5 +47,5 @@ export default function useAuth() {
     document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // delete cookie
   };
 
-  return { isAuth, login, logout, signup, jwt, email };
+  return { isAuth, login, logout, signup };
 }
