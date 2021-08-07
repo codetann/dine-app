@@ -7,13 +7,15 @@ import App from "./App";
 
 const Root = () => {
   return (
-    <AppContextProvider>
-      <CloudinaryContext cloudName={process.env.REACT_APP_CLOUD_NAME}>
-        <ChakraProvider>
-          <App />
-        </ChakraProvider>
-      </CloudinaryContext>
-    </AppContextProvider>
+    <React.StrictMode>
+      <AppContextProvider>
+        <CloudinaryContext cloudName={process.env.REACT_APP_CLOUD_NAME}>
+          <ChakraProvider>
+            <App />
+          </ChakraProvider>
+        </CloudinaryContext>
+      </AppContextProvider>
+    </React.StrictMode>
   );
 };
 
