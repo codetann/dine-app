@@ -17,7 +17,7 @@ import { useAppContext } from "../../providers/AppContextProvider";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isAuth } = useAppContext();
+  const { login, isAuth, TEST } = useAppContext();
   const history = useHistory();
 
   useEffect(() => {
@@ -34,6 +34,10 @@ export default function Login() {
     setPassword("");
   };
   const handleSignup = () => history.push("/signup");
+  const testingLogin = () => {
+    if (!process.env.REACT_APP_TESTING) return;
+    TEST.forceLogin();
+  };
   const handleChange = (e) => {
     if (e.target.id === "email") {
       setEmail(e.target.value);
@@ -47,6 +51,7 @@ export default function Login() {
       {/* Info Section */}
       <HStack spacing="1rem">
         <IconButton
+          onClick={testingLogin}
           color="purple.600"
           fontSize="1.5rem"
           icon={<FaHamburger />}
