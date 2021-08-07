@@ -6,6 +6,7 @@ const baseURL = "http://localhost:8050";
 export default function useApi() {
   const [isAuth, setIsAuth] = useState(false);
   const [user, setUser] = useState(null);
+  const [testing, setTesting] = useState(false);
 
   /* AUTH ACTIONS */
   const login = async (email, password) => {
@@ -58,6 +59,17 @@ export default function useApi() {
     }
   };
 
+  /* TESTING */
+  const forceLogin = () => {
+    setUser({
+      name: "TEST USER",
+      email: "TEST@TEST.COM",
+      photo: "TEST@TEST.COM",
+    });
+    setTesting(true);
+    setIsAuth(true);
+  };
+
   return {
     AUTH: {
       login,
@@ -68,6 +80,10 @@ export default function useApi() {
     },
     API: {
       updateImage,
+    },
+    TEST: {
+      testing,
+      forceLogin,
     },
   };
 }
