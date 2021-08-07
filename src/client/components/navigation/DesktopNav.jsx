@@ -19,7 +19,7 @@ const LINKS = [
   { id: 3, text: "Favorites", path: "/" },
 ];
 export default function DesktopNav() {
-  const { logout } = useAppContext();
+  const { logout, user } = useAppContext();
   const history = useHistory();
   const [isActive, setIsActive] = useState("Start");
   const handleLinkChange = (e) => setIsActive(e.target.id);
@@ -27,6 +27,7 @@ export default function DesktopNav() {
     logout();
     history.push("/login");
   };
+  const linkProfile = () => history.push("/profile");
 
   return (
     <HStack
@@ -58,10 +59,10 @@ export default function DesktopNav() {
       {/* Profile */}
       <Menu>
         <MenuButton>
-          <Avatar size="sm" />
+          <Avatar size="sm" src={user.photo} />
         </MenuButton>
         <MenuList>
-          <MenuItem>Profile</MenuItem>
+          <MenuItem onClick={linkProfile}>Profile</MenuItem>
           <MenuItem>Settings</MenuItem>
           <MenuItem onClick={handleSignOut} color="red.400" fontWeight="bold">
             Sign Out
