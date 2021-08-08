@@ -3,13 +3,14 @@ import path from "path";
 import http from "http";
 import cors from "cors";
 import chalk from "chalk";
+import socket from "socket.io";
 import cookieParser from "cookie-parser";
 
 import indexRouter from "./routes/index.router";
 import authRouter from "./routes/auth.router";
 import apiRouter from "./routes/api.router";
 
-import io from "./sockets";
+import socketio from "./sockets";
 import db from "./database";
 import config from "./environment";
 
@@ -28,7 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../dist")));
 
 // socket.io
-io.start();
+const io = socket(server);
+socketio(io);
 
 // routes
 app.use("/", indexRouter);
