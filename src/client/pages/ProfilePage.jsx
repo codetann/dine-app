@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import { VStack, Button, HStack } from "@chakra-ui/react";
 import { useAppContext } from "../providers/AppContextProvider";
 import { EmailInput, UploadWidget, FullnameInput } from "../components/input";
+import AuthPage from "../components/layout/AuthPage";
+import FadeTransition from "../components/animations/FadeTransition";
 import Nav from "../components/navigation/Nav";
 
 export default function ProfilePage() {
@@ -24,25 +26,30 @@ export default function ProfilePage() {
   };
 
   return (
-    <VStack
-      maxW="100vw"
-      width="100%"
-      minH="100vh"
-      align="center"
-      justify="flex-start"
-      bg="gray.50"
-      spacing="6rem"
-      p={["1rem 1rem", "2rem 1rem", "2rem 2rem", "2rem 4rem", "2rem 4rem"]}
-    >
-      <Nav />
-      <FullnameInput name={name} handleChange={handleChange} />
-      <EmailInput email={email} handleChange={handleChange} />
-      <UploadWidget setImage={setImage} />
-      <HStack justify="right">
-        <Button colorScheme="purple" onClick={handleSave}>
-          Save
-        </Button>
-      </HStack>
-    </VStack>
+    <AuthPage>
+      <FadeTransition>
+        <VStack
+          w="100%"
+          p="2rem"
+          maxW="xl"
+          spacing="2rem"
+          bg="white"
+          borderRadius=".5rem"
+          shadow="md"
+        >
+          <FullnameInput name={name} handleChange={handleChange} />
+          <EmailInput email={email} handleChange={handleChange} />
+          <HStack w="100%" justify="left">
+            <UploadWidget setImage={setImage} />
+          </HStack>
+
+          <HStack justify="right">
+            <Button colorScheme="purple" onClick={handleSave}>
+              Save
+            </Button>
+          </HStack>
+        </VStack>
+      </FadeTransition>
+    </AuthPage>
   );
 }
