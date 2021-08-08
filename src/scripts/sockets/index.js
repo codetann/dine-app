@@ -1,17 +1,36 @@
-import socketio from "socket.io";
-import { disconnect } from "./socket.disconnect";
+import { v4 as uuid } from "uuid";
+import rooms from "./rooms";
 import chalk from "chalk";
-import { log } from "./socket.log";
 
-const start = (server) => {
-  const io = new socketio.Server(server);
+class Connection {
+  constructor(io, socket) {
+    this.socket = socket;
+    this.io = io;
+    this.id = uuid();
+    this.roomId;
 
-  // put socket events here
+    socket.on("join-room", ({ roomid }) => this.joinRoom(roomid));
+  }
+
+  joinRoom(roomid) {
+    try {
+      const members = rooms.join(this.id, roomid);
+      this.roomId = roomid;
+      this.socket.join(roomid);
+      this.socket.emit("success:join-room", { id: this.id, members });
+      this.io.to(roomid).emit("new:join-room", { members });
+    } catch (error) {
+      console.error(error);
+      this.socket.emit("error:join-room", { msg: error });
+    }
+  }
+}
+
+function socketio(io) {
   io.on("connection", (socket) => {
     console.log(`${chalk.blue("🔌 socket")}  - connection successful`);
-    log(socket);
-    disconnect(socket);
+    new Connection(io, socket);
   });
-};
+}
 
-export default { start };
+export default socketio;
