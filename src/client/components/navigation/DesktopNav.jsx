@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import {
   HStack,
   Button,
@@ -14,18 +14,31 @@ import BasicLogo from "../logo/BasicLogo";
 import { useAppContext } from "../../providers/AppContextProvider";
 
 const LINKS = [
-  { id: 1, text: "Home ", path: "/" },
-  { id: 2, text: "Nearby", path: "/" },
-  { id: 3, text: "Favorites", path: "/" },
+  { id: 1, text: "Home ", path: "/dashboard" },
+  { id: 2, text: "Nearby", path: "/nearby" },
+  { id: 3, text: "Favorites", path: "/favorites" },
 ];
+
 export default function DesktopNav() {
-  const { logout, user } = useAppContext();
   const history = useHistory();
-  const [isActive, setIsActive] = useState("Start");
-  const handleLinkChange = (e) => setIsActive(e.target.id);
+  const location = useLocation();
+  const { logout, user } = useAppContext();
+  const [activeId, setActiveId] = useState(1);
+
+  useEffect(() => {
+    if (location.pathname === "/desktop") setActiveId(1);
+    if (location.pathname === "/nearby") setActiveId(2);
+    if (location.pathname === "/favorites") setActiveId(3);
+    if (location.pathname === "/joinroom") setActiveId(0);
+    if (location.pathname === "/profile") setActiveId(0);
+  }, [location]);
+  // event handlers
   const handleSignOut = () => {
     logout();
     history.push("/login");
+  };
+  const handleClick = (e) => {
+    history.push(e.target.id);
   };
   const linkProfile = () => history.push("/profile");
 
@@ -45,11 +58,11 @@ export default function DesktopNav() {
         {LINKS.map((l) => (
           <Button
             key={l.id}
-            variant={isActive === l.text ? "solid" : "ghost"}
+            variant={activeId === l.id ? "solid" : "ghost"}
             colorScheme="purple"
-            color={isActive === l.text ? "white" : "black"}
-            id={l.text}
-            onClick={handleLinkChange}
+            color={activeId === l.id ? "white" : "black"}
+            id={l.path}
+            onClick={handleClick}
           >
             {l.text}
           </Button>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import {
   IconButton,
   HStack,
@@ -20,27 +20,38 @@ import { useAppContext } from "../../providers/AppContextProvider";
 // there is a bug when applying spacing to the (VStack) when the collapse transition fires
 
 const LINKS = [
-  { id: 1, text: "Home ", path: "/" },
-  { id: 2, text: "Nearby", path: "/" },
-  { id: 3, text: "Favorites", path: "/" },
+  { id: 1, text: "Home ", path: "/dashboard" },
+  { id: 2, text: "Nearby", path: "/nearby" },
+  { id: 3, text: "Favorites", path: "/favorites" },
 ];
 
 export default function MobileNav() {
-  const { logout, user } = useAppContext();
   const history = useHistory();
+  const location = useLocation();
+  const { logout, user } = useAppContext();
+  const [activeId, setActiveId] = useState(1);
   const { isOpen, onToggle } = useDisclosure();
-  const [isActive, setIsActive] = useState("Start");
-  const handleLinkChange = (e) => {
-    setIsActive(e.target.id);
-    onToggle();
-  };
+  const [isActive, setIsActive] = useState(1);
+
+  useEffect(() => {
+    if (location.pathname === "/desktop") setActiveId(1);
+    if (location.pathname === "/nearby") setActiveId(2);
+    if (location.pathname === "/favorites") setActiveId(3);
+    if (location.pathname === "/joinroom") setActiveId(0);
+    if (location.pathname === "/profile") setActiveId(0);
+  }, [location]);
+
   const handleSignOut = () => {
     logout();
     history.push("/login");
   };
+  const handleClick = (e) => {
+    history.push(e.target.id);
+  };
   const linkProfile = () => history.push("/profile");
 
   if (!user) return <div>...Loading</div>;
+
   return (
     <VStack
       zIndex="10"
@@ -81,16 +92,16 @@ export default function MobileNav() {
           <VStack w="100%">
             {LINKS.map((l) => (
               <Button
-                variant={isActive === l.text ? "solid" : "ghost"}
+                variant={activeId === l.id ? "solid" : "ghost"}
                 colorScheme="purple"
-                color={isActive === l.text ? "white" : "black"}
+                color={activeId === l.id ? "white" : "black"}
                 display="flex"
                 w="100%"
                 alignItems="center"
                 justifyContent="flex-start"
                 key={l.id}
-                id={l.text}
-                onClick={handleLinkChange}
+                id={l.path}
+                onClick={handleClick}
               >
                 {l.text}
               </Button>
