@@ -1,12 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { HStack, PinInput, PinInputField } from "@chakra-ui/react";
 
-export default function RoomNumberInput({ setRoomNumber }) {
-  const handleChange = (e) => setRoomNumber(e.target.value);
+export default function RoomNumberInput({ setRoomId }) {
+  const handleChange = (value) => {
+    setRoomId(value);
+  };
 
   return (
     <HStack>
-      <PinInput colorScheme="purple" type="alphanumeric">
+      <PinInput
+        onChange={handleChange}
+        colorScheme="purple"
+        type="alphanumeric"
+      >
         <PinInputField />
         <PinInputField />
         <PinInputField />
@@ -15,3 +22,7 @@ export default function RoomNumberInput({ setRoomNumber }) {
     </HStack>
   );
 }
+
+RoomNumberInput.propTypes = {
+  setRoomId: PropTypes.func,
+};
