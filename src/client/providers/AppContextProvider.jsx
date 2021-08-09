@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import useApi from "../hooks/useApi";
 import useWebSockets from "../hooks/useWebSockets";
 import PropTypes from "prop-types";
@@ -12,6 +12,11 @@ export const useAppContext = () => useContext(AppContext);
 export default function AppContextProvider({ children }) {
   const { API, AUTH, user, error, TEST } = useApi();
   const socketio = useWebSockets();
+
+  // initialize socketio on login / signup
+  useEffect(() => {
+    if (AUTH.isAuth) socketio.connect();
+  }, [AUTH.isAuth]);
 
   const data = {
     error,
