@@ -11,18 +11,16 @@ import FadeTransition from "../components/animations/FadeTransition";
 function Dashboard() {
   const history = useHistory();
 
-  const linkJoinRoom = () => {
-    history.push("/joinroom");
-  };
+  const linkJoinRoom = () => history.push("/joinroom");
+  const linkCreateRoom = () => history.push("/createroom");
+
   return (
     <AuthPage>
-      {/* home step */}
-
       <FadeTransition>
         <VStack w="100%">
           <>
             <Card onClick={linkJoinRoom} isButton heading="Join Friends" />
-            <Card isButton heading="Create A Room" />
+            <Card onClick={linkCreateRoom} isButton heading="Create A Room" />
           </>
         </VStack>
       </FadeTransition>
