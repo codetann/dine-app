@@ -13,6 +13,7 @@ class Connection {
     socket.on("create-room", ({ name, details }) =>
       this.createRoom(name, details)
     );
+    socket.on("leave-room", () => this.leaveRoom());
   }
 
   async createRoom(name, details) {
@@ -36,11 +37,28 @@ class Connection {
       this.roomid = roomid;
       this.socket.join(roomid);
       // send success message with user id and members
-      this.socket.emit("success:join-room", { id: this.id, members });
+      this.socket.emit("success:join-room", { id: this.id, roomid, members });
       this.io.to(roomid).emit("new:join-room", { members });
     } catch (error) {
       this.socket.emit("error:any", { error: "Could not find room." });
       console.error(error);
+    }
+  }
+
+  leaveRoom() {
+    try {
+      const members = rooms.leave(this.id, this.roomid);
+      this.socket.leave(this.roomid);
+
+      this.io.to(this.roomid).emit("new:leave-room", { members });
+      this.roomid = "";
+
+      this.socket.emit("success:leave-room", { members: null });
+    } catch (error) {
+      console.log(error);
+      this.socket.emit("error:any", {
+        error: "Error while leaving room",
+      });
     }
   }
 }

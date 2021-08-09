@@ -16,11 +16,11 @@ class Rooms {
   async create(id, name, details) {
     // ... deconstruct details here
     const roomid = this._createRoomId();
-    const businesses = await yelpTEST();
-    console.log(businesses); // ! TEST TEST TEST TEST TEST TEST TEST TEST
+    ////const businesses = await yelpTEST();
+    ////console.log(businesses); // ! TEST TEST TEST TEST TEST TEST TEST TEST
     // set room details
     this.rooms = [...this.rooms, roomid];
-    this.roomDetails = [...this.roomDetails, { roomid, businesses }];
+    this.roomDetails = [...this.roomDetails, { roomid, businesses: "test" }];
     this.members = [...this.members, { id, name, roomid }];
     // return room info
     const members = this.members.filter((r) => r.roomid === roomid);
@@ -48,6 +48,14 @@ class Rooms {
       if (!this.rooms.some((i) => i === roomid))
         throw new Error("could not find room");
     }
+  }
+
+  leave(id, roomid) {
+    // filter user out of members
+    this.members = this.members.filter((m) => m.id !== id);
+    if (!this.members) throw new Error("Error while leaving room");
+    // return the rest of the users in the roomid
+    return this.members.filter((m) => m.roomid === roomid);
   }
 }
 
