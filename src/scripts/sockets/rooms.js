@@ -57,6 +57,12 @@ class Rooms {
     // return the rest of the users in the roomid
     return this.members.filter((m) => m.roomid === roomid);
   }
+
+  quit(roomid) {
+    this.rooms = this.rooms.filter((r) => r !== roomid);
+    this.roomDetails = this.roomDetails.filter((r) => r.id !== roomid);
+    this.members = this.members.filter((m) => m.roomid !== roomid);
+  }
 }
 
 const rooms = () => {

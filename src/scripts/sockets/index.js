@@ -14,6 +14,7 @@ class Connection {
       this.createRoom(name, details)
     );
     socket.on("leave-room", () => this.leaveRoom());
+    socket.on("quit-room", () => this.quitRoom());
   }
 
   async createRoom(name, details) {
@@ -53,13 +54,26 @@ class Connection {
       this.io.to(this.roomid).emit("new:leave-room", { members });
       this.roomid = "";
 
-      this.socket.emit("success:leave-room", { members: null });
+      this.socket.emit("success:leave-room");
     } catch (error) {
       console.log(error);
       this.socket.emit("error:any", {
         error: "Error while leaving room",
       });
     }
+  }
+
+  quitRoom() {
+    rooms.quit(this.id, this.roomid);
+
+    this.socket.leave(this.roomid);
+    this.io.to(this.roomid).emit("new:quit-room");
+    this.io
+      .to(this.roomid)
+      .emit("error:any", { error: "Admin has left the current room" });
+    this.socket.emit("success:quit-room");
+
+    this.roomid = "";
   }
 }
 
