@@ -7,21 +7,40 @@ class Connection {
     this.socket = socket;
     this.io = io;
     this.id = uuid();
-    this.roomId;
+    this.roomid;
 
-    socket.on("join-room", ({ roomid }) => this.joinRoom(roomid));
+    socket.on("join-room", ({ name, roomid }) => this.joinRoom(name, roomid));
+    socket.on("create-room", ({ name, details }) =>
+      this.createRoom(name, details)
+    );
   }
 
-  joinRoom(roomid) {
+  async createRoom(name, details) {
     try {
-      const members = rooms.join(this.id, roomid);
-      this.roomId = roomid;
+      const { roomid, members } = await rooms.create(this.id, name, details);
+      // set user roomid and join room
+      this.roomid = roomid;
       this.socket.join(roomid);
+      // send success message back to user
+      this.socket.emit("success:create-room", { id: this.id, members, roomid });
+    } catch (error) {
+      console.log(error);
+      this.socket.emit("error:any", { error: "Could not create room" });
+    }
+  }
+
+  joinRoom(name, roomid) {
+    try {
+      const members = rooms.join(this.id, name, roomid);
+      // set user roomid and join room
+      this.roomid = roomid;
+      this.socket.join(roomid);
+      // send success message with user id and members
       this.socket.emit("success:join-room", { id: this.id, members });
       this.io.to(roomid).emit("new:join-room", { members });
     } catch (error) {
+      this.socket.emit("error:any", { error: "Could not find room." });
       console.error(error);
-      this.socket.emit("error:join-room", { msg: error });
     }
   }
 }
