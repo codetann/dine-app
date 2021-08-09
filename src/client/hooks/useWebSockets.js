@@ -11,15 +11,6 @@ export default function useWebSockets() {
   const [socket, setSocket] = useState(null);
   const [members, setMembers] = useState([]);
 
-  // // initialize new socket
-  // useEffect(() => {
-  //   const newSocket = io(URL);
-  //   setSocket(newSocket);
-
-  //   return () => newSocket.close();
-  // }, [setSocket]);
-
-  // set socket listeners after the socket is created
   useEffect(() => {
     if (socket) {
       socket.on("error:any", ({ error }) => {
@@ -47,9 +38,19 @@ export default function useWebSockets() {
       socket.on("new:leave-room", ({ members }) => {
         setMembers(members);
       });
-      socket.on("success:leave-room", ({ members }) => {
-        setMembers(members);
+      socket.on("success:leave-room", () => {
+        setMembers(null);
         setRoomId(null);
+      });
+      socket.on("success:quit-room", () => {
+        setMembers(null);
+        setRoomId(null);
+        setAdmin(false);
+      });
+      socket.on("new:quit-room", () => {
+        setMembers(null);
+        setRoomId(null);
+        setAdmin(false);
       });
     }
   }, [socket]);
@@ -69,12 +70,16 @@ export default function useWebSockets() {
   const leaveRoom = () => {
     socket.emit("leave-room");
   };
+  const quitRoom = () => {
+    socket.emit("quit-room");
+  };
 
   return {
     emit: {
       joinRoom,
       createRoom,
       leaveRoom,
+      quitRoom,
     },
     connect,
     members,
