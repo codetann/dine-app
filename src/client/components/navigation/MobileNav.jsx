@@ -28,7 +28,7 @@ const LINKS = [
 export default function MobileNav() {
   const history = useHistory();
   const location = useLocation();
-  const { logout, user } = useAppContext();
+  const { AUTH, user } = useAppContext();
   const [activeId, setActiveId] = useState(1);
   const { isOpen, onToggle } = useDisclosure();
   const [isActive, setIsActive] = useState(1);
@@ -42,7 +42,7 @@ export default function MobileNav() {
   }, [location]);
 
   const handleSignOut = () => {
-    logout();
+    AUTH.logout();
     history.push("/login");
   };
   const handleClick = (e) => {

@@ -4,13 +4,13 @@ import { Route, Redirect } from "react-router-dom";
 import { useAppContext } from "../../providers/AppContextProvider";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  const { isAuth } = useAppContext();
+  const { AUTH } = useAppContext();
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuth ? <Component {...props} /> : <Redirect to="/login" />
+        AUTH.isAuth ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );

@@ -22,7 +22,7 @@ const LINKS = [
 export default function DesktopNav() {
   const history = useHistory();
   const location = useLocation();
-  const { logout, user } = useAppContext();
+  const { AUTH, user } = useAppContext();
   const [activeId, setActiveId] = useState(1);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function DesktopNav() {
   }, [location]);
   // event handlers
   const handleSignOut = () => {
-    logout();
+    AUTH.logout();
     history.push("/login");
   };
   const handleClick = (e) => {

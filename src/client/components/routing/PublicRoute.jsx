@@ -4,13 +4,13 @@ import { Route, Redirect } from "react-router-dom";
 import { useAppContext } from "../../providers/AppContextProvider";
 
 export default function PublicRoute({ component: Component, ...rest }) {
-  const { isAuth } = useAppContext();
+  const { AUTH } = useAppContext();
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuth ? <Redirect to="/dashboard" /> : <Component {...props} />
+        !AUTH.isAuth ? <Component {...props} /> : <Redirect to="/dashboard" />
       }
     />
   );
