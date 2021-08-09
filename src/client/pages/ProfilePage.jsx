@@ -14,18 +14,6 @@ export default function ProfilePage() {
   const [email, setEmail] = useState(user.email);
   const [image, setImage] = useState(user.photo);
 
-  useEffect(() => {
-    if (error)
-      toast({
-        title: "Error",
-        description: error,
-        position: "top-right",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-  }, [error]);
-
   const isDisabled =
     name === user.name && email === user.email && image === user.photo;
 
@@ -47,6 +35,15 @@ export default function ProfilePage() {
     API.updateInfo(info);
 
     history.push("/dashboard");
+
+    toast({
+      title: "Success",
+      description: "Updated user profile successfully",
+      position: "top-right",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
   };
 
   return (
