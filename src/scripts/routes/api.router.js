@@ -1,8 +1,8 @@
 import express from "express";
-import { uploadPhoto } from "../controllers/api.controller";
+import { updateUserInfo } from "../controllers/api.controller";
 
 const router = express.Router();
 
-router.post("/upload/photo", uploadPhoto);
+router.post("/update/user", updateUserInfo);
 
 export default router;
