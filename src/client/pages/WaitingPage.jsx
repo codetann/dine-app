@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Heading, Button, VStack, HStack, Tag } from "@chakra-ui/react";
 import { useAppContext } from "../providers/AppContextProvider";
 // components
@@ -8,14 +9,24 @@ import FadeTransition from "../components/animations/FadeTransition";
 // TODO - add support to show other peoples avatars
 
 export default function WaitingPage() {
+  const history = useHistory();
   const { socketio } = useAppContext();
+
+  // useEffect(() => {
+  //   if (!socketio.roomid)
+  // }, [socketio.roomid]);
+
+  const handleLeave = () => {
+    socketio.emit.leaveRoom();
+    history.push("/dashboard");
+  };
 
   return (
     <AuthPage>
       <FadeTransition>
         <VStack maxW="xl" width="100%" spacing="2rem">
           {/* Only Viewable By Creator Of Room */}
-          {socketio.roomid && (
+          {socketio.admin && (
             <HStack>
               <Heading size="md">Invite Code:</Heading>
               <Tag size="lg" variant="solid" colorScheme="purple">
@@ -44,7 +55,7 @@ export default function WaitingPage() {
             ))}
           </VStack>
 
-          {socketio.roomid && (
+          {socketio.admin && (
             <HStack w="100%" maxW="md">
               <Button colorScheme="red" variant="ghost" w="100%">
                 Leave
@@ -55,8 +66,14 @@ export default function WaitingPage() {
             </HStack>
           )}
 
-          {!socketio.roomid && (
-            <Button colorScheme="purple" variant="outline" w="100%">
+          {!socketio.admin && (
+            <Button
+              colorScheme="purple"
+              variant="outline"
+              w="100%"
+              maxW="md"
+              onClick={handleLeave}
+            >
               Leave
             </Button>
           )}

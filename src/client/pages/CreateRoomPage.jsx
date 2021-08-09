@@ -12,9 +12,9 @@ export default function CreateRoomPage() {
 
   // handle page change
   useEffect(() => {
-    if (socketio.id && AUTH.isAuth) history.push("/waiting");
+    if (socketio.roomid) history.push("/waiting");
     if (!AUTH.isAuth) history.push("/login");
-  }, [socketio.id]);
+  }, [socketio.roomid]);
 
   // show error if one occurs. Error will reset after 1s
   useEffect(() => {
