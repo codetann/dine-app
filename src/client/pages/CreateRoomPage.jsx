@@ -52,7 +52,7 @@ export default function CreateRoomPage() {
           spacing="2rem"
         >
           <Button onClick={handleCreate} colorScheme="purple">
-            Join
+            Create
           </Button>
         </VStack>
       </FadeTransition>
