@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { VStack, Button, HStack } from "@chakra-ui/react";
+import { VStack, Button, HStack, useToast } from "@chakra-ui/react";
 import { useAppContext } from "../providers/AppContextProvider";
 import { EmailInput, UploadWidget, FullnameInput } from "../components/input";
 import AuthPage from "../components/layout/AuthPage";
 import FadeTransition from "../components/animations/FadeTransition";
-import Nav from "../components/navigation/Nav";
 
 export default function ProfilePage() {
-  const { user, updatePhoto } = useAppContext();
+  const toast = useToast();
+  const history = useHistory();
+  const { user, API, error } = useAppContext();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [image, setImage] = useState(user.photo);
-  const history = useHistory();
+
+  useEffect(() => {
+    if (error)
+      toast({
+        title: "Error",
+        description: error,
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+  }, [error]);
+
+  const isDisabled =
+    name === user.name && email === user.email && image === user.photo;
 
   const handleChange = (e) => {
     const id = e.target.id;
@@ -21,7 +36,16 @@ export default function ProfilePage() {
   };
 
   const handleSave = async () => {
-    await updatePhoto(image);
+    if (isDisabled) return;
+
+    const info = {
+      name: name === user.name ? null : name,
+      email: email === user.email ? null : email,
+      photo: image === user.photo ? null : image,
+    };
+
+    API.updateInfo(info);
+
     history.push("/dashboard");
   };
 
@@ -44,7 +68,11 @@ export default function ProfilePage() {
           </HStack>
 
           <HStack justify="right">
-            <Button colorScheme="purple" onClick={handleSave}>
+            <Button
+              colorScheme="purple"
+              onClick={handleSave}
+              isDisabled={isDisabled}
+            >
               Save
             </Button>
           </HStack>
