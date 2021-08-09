@@ -1,9 +1,9 @@
-import { updatePhoto } from "../database/util.js";
+import { updateUser } from "../api/database";
 
-export const uploadPhoto = async (req, res) => {
+export const updateUserInfo = async (req, res) => {
   try {
-    const { email, url } = req.body;
-    const user = await updatePhoto(url, email);
+    const { updates, email } = req.body;
+    const user = await updateUser(updates, email);
     res.status(200).json(user);
   } catch (error) {
     console.log(error);
