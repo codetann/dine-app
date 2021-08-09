@@ -12,15 +12,21 @@ export default function WaitingPage() {
   const history = useHistory();
   const { socketio } = useAppContext();
 
-  // useEffect(() => {
-  //   if (!socketio.roomid)
-  // }, [socketio.roomid]);
+  useEffect(() => {
+    if (!socketio.roomid) history.push("/dashboard");
+  }, [socketio.roomid]);
 
   const handleLeave = () => {
     socketio.emit.leaveRoom();
     history.push("/dashboard");
   };
 
+  const handleQuit = () => {
+    socketio.emit.quitRoom();
+    history.push("/dashboard");
+  };
+
+  if (!socketio.members) return <div></div>;
   return (
     <AuthPage>
       <FadeTransition>
@@ -57,8 +63,13 @@ export default function WaitingPage() {
 
           {socketio.admin && (
             <HStack w="100%" maxW="md">
-              <Button colorScheme="red" variant="ghost" w="100%">
-                Leave
+              <Button
+                onClick={handleQuit}
+                colorScheme="red"
+                variant="ghost"
+                w="100%"
+              >
+                Quit
               </Button>
               <Button colorScheme="purple" variant="solid" w="100%">
                 Start
