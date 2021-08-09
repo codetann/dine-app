@@ -8,6 +8,7 @@ import {
   VStack,
   Text,
   Switch,
+  useToast,
 } from "@chakra-ui/react";
 import { FaHamburger } from "react-icons/fa";
 import { useAppContext } from "../../providers/AppContextProvider";
@@ -24,13 +25,26 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [agreeTerms, setAgreeTerms] = useState(false);
+  const toast = useToast();
   const history = useHistory();
-  const { signup, isAuth } = useAppContext();
+  const { AUTH, error } = useAppContext();
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const { isValid, isDisabled } = useFormValidate(formData, agreeTerms);
 
   useEffect(() => {
-    if (isAuth) {
+    if (error)
+      toast({
+        title: "Error",
+        description: error,
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+  }, [error]);
+
+  useEffect(() => {
+    if (AUTH.isAuth) {
       history.push("/dashboard");
     }
   });
@@ -51,7 +65,7 @@ export default function Signup() {
     if (!formData) return;
     if (!isValid) return;
 
-    await signup(formData);
+    await AUTH.signup(formData);
   };
   const handleLoginRedirect = () => history.push("/login");
 

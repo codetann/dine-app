@@ -10,25 +10,40 @@ import {
   Input,
   FormControl,
   FormLabel,
+  useToast,
 } from "@chakra-ui/react";
 import { FaHamburger } from "react-icons/fa";
 import { useAppContext } from "../../providers/AppContextProvider";
 
 export default function Login() {
+  const toast = useToast();
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, isAuth, TEST } = useAppContext();
-  const history = useHistory();
+  const { AUTH, error, TEST } = useAppContext();
 
   useEffect(() => {
-    if (isAuth) history.push("/dashboard");
-  }, [isAuth]);
+    if (AUTH.isAuth) history.push("/dashboard");
+  }, [AUTH.isAuth]);
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error",
+        description: error,
+        position: "top-right",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [error]);
 
   // event handler functions
   const handleLogin = async () => {
     if (!email || !password) return;
 
-    await login(email, password);
+    await AUTH.login(email, password);
 
     setEmail("");
     setPassword("");
