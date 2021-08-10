@@ -1,16 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Redirect } from "react-router-dom";
-import { useAppContext } from "../../providers/AppContextProvider";
+import { useUser } from "../../hooks";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  const { AUTH } = useAppContext();
+  const { isAuth } = useUser();
 
   return (
     <Route
       {...rest}
       render={(props) =>
-        AUTH.isAuth ? <Component {...props} /> : <Redirect to="/login" />
+        isAuth ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   );

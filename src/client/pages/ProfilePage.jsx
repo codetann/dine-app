@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import { VStack, Button, HStack, useToast } from "@chakra-ui/react";
-import { useAppContext } from "../providers/AppContextProvider";
 import { EmailInput, UploadWidget, FullnameInput } from "../components/input";
 import AuthPage from "../components/layout/AuthPage";
 import FadeTransition from "../components/animations/FadeTransition";
+import { useUpdate, useUser } from "../hooks";
 
 export default function ProfilePage() {
-  const toast = useToast();
-  const history = useHistory();
-  const { user, API, error } = useAppContext();
+  const { user } = useUser();
+  const updateUser = useUpdate();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [image, setImage] = useState(user.photo);
@@ -32,18 +30,7 @@ export default function ProfilePage() {
       photo: image === user.photo ? null : image,
     };
 
-    API.updateInfo(info);
-
-    history.push("/dashboard");
-
-    toast({
-      title: "Success",
-      description: "Updated user profile successfully",
-      position: "top-right",
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-    });
+    await updateUser(info);
   };
 
   return (

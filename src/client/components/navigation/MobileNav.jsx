@@ -16,6 +16,7 @@ import {
 import BasicLogo from "../logo/BasicLogo";
 import { HamburgerIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { useAppContext } from "../../providers/AppContextProvider";
+import { useLogout, useUser } from "../../hooks";
 
 // there is a bug when applying spacing to the (VStack) when the collapse transition fires
 
@@ -28,10 +29,10 @@ const LINKS = [
 export default function MobileNav() {
   const history = useHistory();
   const location = useLocation();
-  const { AUTH, user } = useAppContext();
+  const { user } = useUser();
+  const logout = useLogout();
   const [activeId, setActiveId] = useState(1);
   const { isOpen, onToggle } = useDisclosure();
-  const [isActive, setIsActive] = useState(1);
 
   useEffect(() => {
     if (location.pathname === "/desktop") setActiveId(1);
@@ -39,15 +40,11 @@ export default function MobileNav() {
     if (location.pathname === "/favorites") setActiveId(3);
     if (location.pathname === "/joinroom") setActiveId(0);
     if (location.pathname === "/profile") setActiveId(0);
+    if (location.pathname === "/waiting") setActiveId(0);
   }, [location]);
 
-  const handleSignOut = () => {
-    AUTH.logout();
-    history.push("/login");
-  };
-  const handleClick = (e) => {
-    history.push(e.target.id);
-  };
+  const handleSignOut = () => logout();
+  const handleClick = (e) => history.push(e.target.id);
   const linkProfile = () => history.push("/profile");
 
   if (!user) return <div>...Loading</div>;

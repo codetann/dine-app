@@ -1,13 +1,12 @@
 import React, { useState, useRef } from "react";
 import { HStack, Button, Avatar } from "@chakra-ui/react";
 import PropTypes from "prop-types";
-
-import { useAppContext } from "../../providers/AppContextProvider";
+import { useUser } from "../../hooks";
 
 export default function UploadWidget({ setImage }) {
   const fileRef = useRef(null);
   const [placeholder, setPlaceholder] = useState("");
-  const { user } = useAppContext();
+  const { user } = useUser();
 
   const handleClick = () => fileRef.current.click();
   const handleChange = (e) => {

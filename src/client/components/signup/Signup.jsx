@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   HStack,
@@ -8,14 +8,13 @@ import {
   VStack,
   Text,
   Switch,
-  useToast,
 } from "@chakra-ui/react";
 import { FaHamburger } from "react-icons/fa";
-import { useAppContext } from "../../providers/AppContextProvider";
 import useFormValidate from "../../hooks/useFormValidate";
 import NameInput from "../input/NameInput";
 import EmailInput from "../input/EmailInput";
 import PasswordInput from "../input/PasswordInput";
+import { useSignup } from "../../hooks";
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -25,29 +24,10 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const toast = useToast();
   const history = useHistory();
-  const { AUTH, error } = useAppContext();
+  const signup = useSignup();
   const [agreeTerms, setAgreeTerms] = useState(false);
   const { isValid, isDisabled } = useFormValidate(formData, agreeTerms);
-
-  useEffect(() => {
-    if (error)
-      toast({
-        title: "Error",
-        description: error,
-        position: "top-right",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-  }, [error]);
-
-  useEffect(() => {
-    if (AUTH.isAuth) {
-      history.push("/dashboard");
-    }
-  });
 
   // handle events
   const handleClick = () => setAgreeTerms(!agreeTerms);
@@ -65,9 +45,9 @@ export default function Signup() {
     if (!formData) return;
     if (!isValid) return;
 
-    await AUTH.signup(formData);
+    await signup(formData);
   };
-  const handleLoginRedirect = () => history.push("/login");
+  const loginRedirect = () => history.push("/login");
 
   return (
     <VStack spacing="3rem" w="100%" maxW="lg">
@@ -84,11 +64,7 @@ export default function Signup() {
         <Heading textAlign="center">Sign up for a free account</Heading>
         <HStack spacing=".4rem">
           <Text>already have an account?</Text>
-          <Text
-            cursor="pointer"
-            color="purple.600"
-            onClick={handleLoginRedirect}
-          >
+          <Text cursor="pointer" color="purple.600" onClick={loginRedirect}>
             Login
           </Text>
         </HStack>

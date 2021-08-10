@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   HStack,
@@ -12,31 +12,20 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { FaHamburger } from "react-icons/fa";
-import { useAppContext } from "../../providers/AppContextProvider";
+import { useLogin } from "../../hooks";
 
 export default function Login() {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { AUTH, TEST } = useAppContext();
-
-  useEffect(() => {
-    if (AUTH.isAuth) history.push("/dashboard");
-  }, [AUTH.isAuth]);
+  const login = useLogin();
 
   // event handler functions
+  const handleSignup = () => history.push("/signup");
   const handleLogin = async () => {
     if (!email || !password) return;
 
-    await AUTH.login(email, password);
-
-    setEmail("");
-    setPassword("");
-  };
-  const handleSignup = () => history.push("/signup");
-  const testingLogin = () => {
-    if (!process.env.REACT_APP_TESTING) return;
-    TEST.forceLogin();
+    await login(email, password);
   };
   const handleChange = (e) => {
     if (e.target.id === "email") {
@@ -51,7 +40,6 @@ export default function Login() {
       {/* Info Section */}
       <HStack spacing="1rem">
         <IconButton
-          onClick={testingLogin}
           color="purple.600"
           fontSize="1.5rem"
           icon={<FaHamburger />}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import {
   HStack,
   Button,
@@ -11,7 +11,7 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import BasicLogo from "../logo/BasicLogo";
-import { useAppContext } from "../../providers/AppContextProvider";
+import { useLogout, useUser } from "../../hooks";
 
 const LINKS = [
   { id: 1, text: "Home ", path: "/dashboard" },
@@ -22,7 +22,8 @@ const LINKS = [
 export default function DesktopNav() {
   const history = useHistory();
   const location = useLocation();
-  const { AUTH, user } = useAppContext();
+  const { user } = useUser();
+  const logout = useLogout();
   const [activeId, setActiveId] = useState(1);
 
   useEffect(() => {
@@ -31,15 +32,11 @@ export default function DesktopNav() {
     if (location.pathname === "/favorites") setActiveId(3);
     if (location.pathname === "/joinroom") setActiveId(0);
     if (location.pathname === "/profile") setActiveId(0);
+    if (location.pathname === "/waiting") setActiveId(0);
   }, [location]);
-  // event handlers
-  const handleSignOut = () => {
-    AUTH.logout();
-    history.push("/login");
-  };
-  const handleClick = (e) => {
-    history.push(e.target.id);
-  };
+
+  const handleSignOut = () => logout();
+  const handleClick = (e) => history.push(e.target.id);
   const linkProfile = () => history.push("/profile");
 
   return (

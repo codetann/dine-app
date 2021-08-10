@@ -15,16 +15,16 @@ class Rooms {
 
   async create(id, name, details) {
     // ... deconstruct details here
-    const roomid = this._createRoomId();
+    const room = this._createRoomId();
     ////const businesses = await yelpTEST();
     ////console.log(businesses); // ! TEST TEST TEST TEST TEST TEST TEST TEST
     // set room details
-    this.rooms = [...this.rooms, roomid];
-    this.roomDetails = [...this.roomDetails, { roomid, businesses: "test" }];
-    this.members = [...this.members, { id, name, roomid }];
+    this.rooms = [...this.rooms, room];
+    this.roomDetails = [...this.roomDetails, { room, businesses: "test" }];
+    this.members = [...this.members, { id, name, room }];
     // return room info
-    const members = this.members.filter((r) => r.roomid === roomid);
-    return { roomid, members };
+    const members = this.members.filter((r) => r.room === room);
+    return { room, members };
   }
 
   /**
@@ -37,31 +37,39 @@ class Rooms {
    * @param {String} roomid - user roomId
    * @returns Error || members of that room
    */
-  join(id, name, roomid) {
-    if (this.rooms.some((i) => i === roomid)) {
+  join(id, name, room) {
+    if (this.rooms.some((i) => i === room)) {
       // push new member to array
-      this.members = [...this.members, { id, name, roomid }];
+      this.members = [...this.members, { id, name, room }];
       // return user if their id matches roomid
-      return this.members.filter((r) => r.roomid === roomid);
+      return this.members.filter((r) => r.room === room);
     } else {
       // throw error if no rooms match roomid
-      if (!this.rooms.some((i) => i === roomid))
+      if (!this.rooms.some((i) => i === room))
         throw new Error("could not find room");
     }
   }
 
-  leave(id, roomid) {
+  leave(id, room) {
     // filter user out of members
     this.members = this.members.filter((m) => m.id !== id);
     if (!this.members) throw new Error("Error while leaving room");
-    // return the rest of the users in the roomid
-    return this.members.filter((m) => m.roomid === roomid);
+    // return the rest of the users in the room
+    return this.members.filter((m) => m.room === room);
   }
 
-  quit(roomid) {
-    this.rooms = this.rooms.filter((r) => r !== roomid);
-    this.roomDetails = this.roomDetails.filter((r) => r.id !== roomid);
-    this.members = this.members.filter((m) => m.roomid !== roomid);
+  quit(room) {
+    this.rooms = this.rooms.filter((r) => r !== room);
+    this.roomDetails = this.roomDetails.filter((r) => r.id !== room);
+    this.members = this.members.filter((m) => m.room !== rooms);
+  }
+
+  start(room) {
+    const i = this.roomDetails.findIndex((rd) => rd.room === room);
+
+    if (i === -1) throw new Error("Can not find room details");
+
+    return this.roomDetails[i];
   }
 }
 

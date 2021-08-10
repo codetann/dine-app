@@ -1,40 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from "react-router-dom";
-import { Button, Heading, VStack, useToast } from "@chakra-ui/react";
-import { useAppContext } from "../providers/AppContextProvider";
+import React, { useState } from "react";
+import { Button, Heading, VStack } from "@chakra-ui/react";
 import RoomNumberInput from "../components/join-room/RoomNumberInput";
 import FadeTransition from "../components/animations/FadeTransition";
 import AuthPage from "../components/layout/AuthPage";
+import { useSockets, useUser } from "../hooks";
 
 export default function JoinRoomPage() {
-  const toast = useToast();
-  const history = useHistory();
-  const { socketio, AUTH, user } = useAppContext();
+  const { joinRoom } = useSockets();
+  const { user } = useUser();
   const [roomid, setRoomid] = useState("");
 
-  // handle page change
-  useEffect(() => {
-    if (socketio.roomid) history.push("/waiting");
-    if (!AUTH.isAuth) history.push("/login");
-  }, [socketio.roomid]);
-
-  // show error if one occurs. Error will reset after 1s
-  useEffect(() => {
-    if (socketio.error)
-      toast({
-        title: "Error",
-        description: socketio.error,
-        position: "top-right",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-  }, [socketio.error]);
-
   // try to join socket
-  const handleJoin = () => {
-    socketio.emit.joinRoom(user.name, roomid);
-  };
+  const handleJoin = () => joinRoom(user.name, roomid);
 
   return (
     <AuthPage>

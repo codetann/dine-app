@@ -5,38 +5,27 @@ import { useAppContext } from "../providers/AppContextProvider";
 // components
 import AuthPage from "../components/layout/AuthPage";
 import FadeTransition from "../components/animations/FadeTransition";
+import { useSockets, useUser } from "../hooks";
 
 // TODO - add support to show other peoples avatars
 
 export default function WaitingPage() {
-  const history = useHistory();
-  const { socketio } = useAppContext();
+  const { leaveRoom, quitRoom, members, room } = useSockets();
+  const { isAdmin } = useUser();
 
-  useEffect(() => {
-    if (!socketio.roomid) history.push("/dashboard");
-  }, [socketio.roomid]);
+  const handleLeave = () => leaveRoom();
+  const handleQuit = () => quitRoom();
 
-  const handleLeave = () => {
-    socketio.emit.leaveRoom();
-    history.push("/dashboard");
-  };
-
-  const handleQuit = () => {
-    socketio.emit.quitRoom();
-    history.push("/dashboard");
-  };
-
-  if (!socketio.members) return <div></div>;
   return (
     <AuthPage>
       <FadeTransition>
         <VStack maxW="xl" width="100%" spacing="2rem">
           {/* Only Viewable By Creator Of Room */}
-          {socketio.admin && (
+          {isAdmin && (
             <HStack>
               <Heading size="md">Invite Code:</Heading>
               <Tag size="lg" variant="solid" colorScheme="purple">
-                {socketio.roomid}
+                {room}
               </Tag>
             </HStack>
           )}
@@ -45,23 +34,24 @@ export default function WaitingPage() {
 
           {/* Members */}
           <VStack w="100%">
-            {socketio.members.map((m) => (
-              <HStack
-                key={m.id}
-                w="100%"
-                maxW="md"
-                p="2rem"
-                borderRadius=".5rem"
-                bg="white"
-                justify="center"
-                shadow="md"
-              >
-                <Heading size="md">{m.name}</Heading>
-              </HStack>
-            ))}
+            {members &&
+              members.map((m) => (
+                <HStack
+                  key={m.id}
+                  w="100%"
+                  maxW="md"
+                  p="2rem"
+                  borderRadius=".5rem"
+                  bg="white"
+                  justify="center"
+                  shadow="md"
+                >
+                  <Heading size="md">{m.name}</Heading>
+                </HStack>
+              ))}
           </VStack>
 
-          {socketio.admin && (
+          {isAdmin && (
             <HStack w="100%" maxW="md">
               <Button
                 onClick={handleQuit}
@@ -77,7 +67,7 @@ export default function WaitingPage() {
             </HStack>
           )}
 
-          {!socketio.admin && (
+          {!isAdmin && (
             <Button
               colorScheme="purple"
               variant="outline"
