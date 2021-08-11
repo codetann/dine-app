@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 import JoinRoomPage from "./pages/JoinRoomPage";
 import CreateRoomPage from "./pages/CreateRoomPage";
 import WaitingPage from "./pages/WaitingPage";
+import GamePage from "./pages/GamePage";
 
 /**
  * TODO | socket.io
@@ -34,6 +35,7 @@ export default function App() {
           <PrivateRoute path="/joinroom" component={JoinRoomPage} />
           <PrivateRoute path="/createroom" component={CreateRoomPage} />
           <PrivateRoute path="/waiting" component={WaitingPage} />
+          <PrivateRoute path="/game" component={GamePage} />
         </Switch>
       </Router>
     </VStack>
