@@ -16,6 +16,7 @@ class Connection {
     socket.on("leave-room", () => this.leaveRoom());
     socket.on("quit-room", () => this.quitRoom());
     socket.on("start-game", () => this.startGame());
+    socket.on("end-game", ({ answers }) => this.endGame(answers));
   }
 
   async createRoom(name, details) {
@@ -85,6 +86,22 @@ class Connection {
       this.socket.emit("error:any", {
         error: "Could not find room details",
       });
+    }
+  }
+
+  endGame(answers) {
+    try {
+      console.log(answers);
+      const result = rooms.end(this.id, this.room, answers);
+      console.log(result);
+      if (result.finished) {
+        // run when game ends
+        this.io.to(this.room).emit("new:end-game", { results: result.results });
+      } else {
+        // run while waiting for others to finsih
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

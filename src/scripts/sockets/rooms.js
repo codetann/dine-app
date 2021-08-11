@@ -22,7 +22,7 @@ class Rooms {
     // set room / details / members
     this.rooms = [...this.rooms, room];
     this.roomDetails = [...this.roomDetails, { room, businesses }];
-    this.members = [...this.members, { id, name, room }];
+    this.members = [...this.members, { id, name, room, answers: null }];
     // return room info
     const members = this.members.filter((r) => r.room === room);
     return { room, members };
@@ -31,7 +31,7 @@ class Rooms {
   join(id, name, room) {
     if (this.rooms.some((i) => i === room)) {
       // push new member to array
-      this.members = [...this.members, { id, name, room }];
+      this.members = [...this.members, { id, name, room, answers: null }];
       // return user if their id matches room
       return this.members.filter((r) => r.room === room);
     } else {
@@ -68,6 +68,35 @@ class Rooms {
     if (i === -1) throw new Error("Can not find room details");
     // return the correct room details
     return this.roomDetails[i];
+  }
+
+  end(id, room, answers) {
+    // get all members in current room
+    const members = this.members.filter((m) => m.room === room);
+    // find current member in members
+    const member = members.find((m) => m.id === id);
+    // set members answers
+    member.answers = answers;
+    this.members = [...this.members, members];
+
+    if (members.every((m) => m.answers)) {
+      let results = [];
+      let details = this.roomDetails.find((rd) => rd.room === room);
+      for (let i = 0; i < details.businesses.length; i++) {
+        results.push({ name: details.businesses[i].name, yes: 0, no: 0 });
+      }
+      members.forEach((m) => {
+        for (let i = 0; i < m.answers.length; i++) {
+          if (m.answers[i]) results[i].yes++;
+          if (!m.answers[i]) results[i].no++;
+        }
+      });
+      console.log(results);
+      return { finished: true, results };
+    } else {
+      // run code here when not everyone is done
+      return { finished: false };
+    }
   }
 }
 
