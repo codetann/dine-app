@@ -49,6 +49,7 @@ const useSetup = () => {
       setIsAdmin(false);
     });
     socket.on("new:start-game", ({ businesses }) => {
+      console.log(businesses);
       setGame(businesses);
     });
   };

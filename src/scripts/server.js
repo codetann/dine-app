@@ -29,7 +29,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../dist")));
 
 // socket.io
-const io = socket(server);
+const io = socket(server, {
+  cors: {
+    origins: ["http://localhost:8050"],
+  },
+});
+
 socketio(io);
 
 // routes

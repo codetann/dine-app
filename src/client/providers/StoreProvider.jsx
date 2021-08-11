@@ -55,6 +55,7 @@ export default function StoreProvider({ children }) {
     members,
     setRoom,
     setMembers,
+    setGame,
   };
 
   return (

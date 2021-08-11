@@ -1,5 +1,7 @@
 import { yelpTEST } from "../api/yelp";
 
+// TODO: on quit, room details are not being removed.
+
 class Rooms {
   constructor() {
     this.rooms = ["test"];
@@ -16,35 +18,24 @@ class Rooms {
   async create(id, name, details) {
     // ... deconstruct details here
     const room = this._createRoomId();
-    ////const businesses = await yelpTEST();
-    ////console.log(businesses); // ! TEST TEST TEST TEST TEST TEST TEST TEST
-    // set room details
+    const businesses = await yelpTEST();
+    // set room / details / members
     this.rooms = [...this.rooms, room];
-    this.roomDetails = [...this.roomDetails, { room, businesses: "test" }];
+    this.roomDetails = [...this.roomDetails, { room, businesses }];
     this.members = [...this.members, { id, name, room }];
     // return room info
     const members = this.members.filter((r) => r.room === room);
     return { room, members };
   }
 
-  /**
-   * join() will look for active rooms the the room id provided.
-   * - if any are found, it will assign the user that room and return members
-   * - if not found, it will throw an error to be sent back to the user
-   *
-   * @param {String} id - user id
-   * @param {String} name - user name
-   * @param {String} roomid - user roomId
-   * @returns Error || members of that room
-   */
   join(id, name, room) {
     if (this.rooms.some((i) => i === room)) {
       // push new member to array
       this.members = [...this.members, { id, name, room }];
-      // return user if their id matches roomid
+      // return user if their id matches room
       return this.members.filter((r) => r.room === room);
     } else {
-      // throw error if no rooms match roomid
+      // throw error if no rooms match room
       if (!this.rooms.some((i) => i === room))
         throw new Error("could not find room");
     }
@@ -59,16 +50,23 @@ class Rooms {
   }
 
   quit(room) {
+    // remove room from rooms
     this.rooms = this.rooms.filter((r) => r !== room);
-    this.roomDetails = this.roomDetails.filter((r) => r.id !== room);
+    // remove room details
+    this.roomDetails = this.roomDetails.filter((r) => r.room !== room);
+    this.roomDetails.filter((r) => {
+      console.log(r.room, room);
+    });
+    // remove all members
     this.members = this.members.filter((m) => m.room !== rooms);
   }
 
   start(room) {
+    // find index of details
     const i = this.roomDetails.findIndex((rd) => rd.room === room);
-
+    console.log(room, i);
     if (i === -1) throw new Error("Can not find room details");
-
+    // return the correct room details
     return this.roomDetails[i];
   }
 }

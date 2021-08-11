@@ -65,7 +65,7 @@ class Connection {
   }
 
   quitRoom() {
-    rooms.quit(this.id, this.room);
+    rooms.quit(this.room);
 
     this.socket.leave(this.room);
     this.io.to(this.room).emit("new:quit-room");
@@ -73,14 +73,13 @@ class Connection {
       .to(this.room)
       .emit("error:any", { error: "Admin has left the current room" });
     this.socket.emit("success:quit-room");
-
     this.roomid = "";
   }
 
   startGame() {
     try {
       const businesses = rooms.start(this.room);
-      this.to.to(this.room).emit("new:start-game", { businesses });
+      this.io.to(this.room).emit("new:start-game", { businesses });
     } catch (error) {
       console.log("Could not find room details");
       this.socket.emit("error:any", {

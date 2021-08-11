@@ -23,7 +23,7 @@ const useSockets = () => {
   };
   const startGame = () => {
     socket.emit("start-game");
-    if (!error) history.push("/game");
+    //if (!error) history.push("/game");
   };
 
   return {

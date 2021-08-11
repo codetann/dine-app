@@ -10,11 +10,12 @@ import { useSockets, useUser } from "../hooks";
 // TODO - add support to show other peoples avatars
 
 export default function WaitingPage() {
-  const { leaveRoom, quitRoom, members, room } = useSockets();
+  const { leaveRoom, quitRoom, startGame, members, room } = useSockets();
   const { isAdmin } = useUser();
 
   const handleLeave = () => leaveRoom();
   const handleQuit = () => quitRoom();
+  const handleStart = () => startGame();
 
   return (
     <AuthPage>
@@ -61,7 +62,12 @@ export default function WaitingPage() {
               >
                 Quit
               </Button>
-              <Button colorScheme="purple" variant="solid" w="100%">
+              <Button
+                onClick={handleStart}
+                colorScheme="purple"
+                variant="solid"
+                w="100%"
+              >
                 Start
               </Button>
             </HStack>
