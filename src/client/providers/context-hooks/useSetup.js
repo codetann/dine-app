@@ -11,7 +11,8 @@ const useSetup = () => {
     setMembers,
     setRoom,
     setIsAdmin,
-    setGame
+    setGameData,
+    setResults
   ) => {
     socket.on("error:any", ({ error }) => {
       setError(error);
@@ -50,7 +51,10 @@ const useSetup = () => {
     });
     socket.on("new:start-game", ({ businesses }) => {
       console.log(businesses);
-      setGame(businesses);
+      setGameData(businesses);
+    });
+    socket.on("new:end-game", ({ results }) => {
+      setResults(results);
     });
   };
 
