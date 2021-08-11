@@ -1,9 +1,15 @@
+import { useEffect } from "react";
+
 import { useStore } from "../providers/StoreProvider";
 import { useHistory } from "react-router-dom";
 
 const useSockets = () => {
   const history = useHistory();
-  const { socket, members, error, room } = useStore();
+  const { socket, members, error, room, gameData } = useStore();
+
+  useEffect(() => {
+    if (gameData) history.push("/game");
+  }, [gameData]);
 
   const joinRoom = (name, room) => {
     socket.emit("join-room", { name, room });
@@ -25,6 +31,9 @@ const useSockets = () => {
     socket.emit("start-game");
     //if (!error) history.push("/game");
   };
+  const endGame = (answers) => {
+    socket.emit("end-game", { answers });
+  };
 
   return {
     joinRoom,
@@ -34,6 +43,8 @@ const useSockets = () => {
     quitRoom,
     members,
     room,
+    gameData,
+    endGame,
   };
 };
 
