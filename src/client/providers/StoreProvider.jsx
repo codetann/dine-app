@@ -12,7 +12,8 @@ export default function StoreProvider({ children }) {
   const [socket, setSocket] = useState(null);
   const [room, setRoom] = useState(null);
   const [members, setMembers] = useState(null);
-  const [game, setGame] = useState(null);
+  const [gameData, setGameData] = useState(null);
+  const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [isAuth, setIsAuth] = useState(null);
@@ -31,7 +32,15 @@ export default function StoreProvider({ children }) {
   // set socket events when socket is loaded
   useEffect(() => {
     if (socket) {
-      initializeSocket(socket, setError, setMembers, setRoom, setIsAdmin);
+      initializeSocket(
+        socket,
+        setError,
+        setMembers,
+        setRoom,
+        setIsAdmin,
+        setGameData,
+        setResults
+      );
     }
   }, [socket]);
 
@@ -55,7 +64,9 @@ export default function StoreProvider({ children }) {
     members,
     setRoom,
     setMembers,
-    setGame,
+    gameData,
+    setGameData,
+    results,
   };
 
   return (
