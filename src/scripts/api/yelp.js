@@ -15,6 +15,8 @@ const _parseBusiness = (data) => {
       rating: d.rating,
       review_count: d.review_count,
       url: d.url,
+      latitude: d.coordinates.latitude,
+      longitude: d.coordinates.longitude,
       phone: {
         number: d.phone,
         display: d.display_phone,

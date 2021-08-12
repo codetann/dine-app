@@ -1,6 +1,7 @@
 import Sequelize from "sequelize";
 import chalk from "chalk"; // colored console.logs
 import UserModel from "./models/user.model";
+import FavoriteModel from "./models/favorite.model";
 
 const sqlite = process.env.NODE_ENV === "development" ? "dev" : "prod";
 
@@ -17,7 +18,21 @@ const db = new Sequelize(
 );
 
 // models
-export const User = UserModel(db);
+export const Users = UserModel(db);
+export const Favorites = FavoriteModel(db);
+
+// User.belongsToMany(Business, {
+//   as: "Users",
+//   through: "UserBusiness",
+//   foreinKey: "uid",
+// });
+// Business.belongsToMany(User, {
+//   as: "Businesses",
+//   through: "UserBusiness",
+//   foreinKey: "bid",
+// });
+// Users.hasMany(Favorites, { foreignKey: "user_id" });
+// Favorites.belongsTo(Users, { foreignKey: "user_id" });
 
 // function is exported and used in the server file to start DB
 const start = async () => {
