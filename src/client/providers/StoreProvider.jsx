@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import io from "socket.io-client";
 import useAlert from "./context-hooks/useAlert";
 import useSetup from "./context-hooks/useSetup";
+import axios from "axios";
 
 const StoreContext = createContext(null);
 const URL = `http://${window.location.hostname}:8050`;
@@ -15,6 +16,7 @@ export default function StoreProvider({ children }) {
   const [members, setMembers] = useState(null);
   const [gameData, setGameData] = useState(null);
   const [results, setResults] = useState(null);
+  const [nearby, setNearby] = useState(null);
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [isAuth, setIsAuth] = useState(null);
@@ -56,9 +58,20 @@ export default function StoreProvider({ children }) {
 
   // get users location when page loads
   useEffect(() => {
+    const fetchNearby = async (lat, long) => {
+      const res = await axios.post("http://localhost:3000/api/nearby", {
+        location: {
+          lat,
+          long,
+        },
+      });
+      const nearbyData = res.data;
+      setNearby(nearbyData);
+    };
     navigator.geolocation.getCurrentPosition((position) => {
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
+      fetchNearby(position.coords.latitude, position.coords.longitude);
     });
   }, []);
 
@@ -82,6 +95,7 @@ export default function StoreProvider({ children }) {
     setResults,
     results,
     location,
+    nearby,
   };
 
   return (
