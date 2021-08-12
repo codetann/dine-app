@@ -66,6 +66,7 @@ export default function StoreProvider({ children }) {
     setMembers,
     gameData,
     setGameData,
+    setResults,
     results,
   };
 
