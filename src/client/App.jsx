@@ -6,6 +6,7 @@ import PrivateRoute from "./components/routing/PrivateRoute";
 import PublicRoute from "./components/routing/PublicRoute";
 // pages
 import HomePage from "./pages/HomePage";
+import NearbyPage from "./pages/NearbyPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -38,6 +39,7 @@ export default function App() {
           <PrivateRoute path="/waiting" component={WaitingPage} />
           <PrivateRoute path="/game" component={GamePage} />
           <PrivateRoute path="/finished" component={FinishPage} />
+          <PrivateRoute path="/nearby" component={NearbyPage} />
         </Switch>
       </Router>
     </VStack>
