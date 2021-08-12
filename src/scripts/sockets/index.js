@@ -20,6 +20,10 @@ class Connection {
   }
 
   async createRoom(name, details) {
+    // TODO-----------------------------TODO //
+    // TODO [-] run yelp api during startRoom
+    // TODO [-] refactor code
+    // TODO-----------------------------TODO //
     try {
       const { room, members } = await rooms.create(this.id, name, details);
       // set user roomid and join room

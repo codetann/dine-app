@@ -1,4 +1,4 @@
-import { yelpTEST } from "../api/yelp";
+import { yelp, yelpTest } from "../api/yelp";
 
 // TODO: on quit, room details are not being removed.
 
@@ -15,10 +15,20 @@ class Rooms {
     return `${chars[i()]}${chars[i()]}${chars[i()]}${chars[i()]}`;
   }
 
+  _sortResults(results) {
+    return results.sort((a, b) => {
+      const aValue = a.yes - a.no;
+      const bValue = b.yes - b.no;
+      if (aValue > bValue) return -1;
+      if (aValue < bValue) return 1;
+      if (aValue === bValue) return 0;
+    });
+  }
+
   async create(id, name, details) {
-    // ... deconstruct details here
     const room = this._createRoomId();
-    const businesses = await yelpTEST();
+    // set data from yelp api
+    const businesses = await yelpTest(details);
     // set room / details / members
     this.rooms = [...this.rooms, room];
     this.roomDetails = [...this.roomDetails, { room, businesses }];
@@ -91,8 +101,8 @@ class Rooms {
           if (!m.answers[i]) results[i].no++;
         }
       });
-      console.log(results);
-      return { finished: true, results };
+      console.log(this._sortResults(results));
+      return { finished: true, results: this._sortResults(results) };
     } else {
       // run code here when not everyone is done
       return { finished: false };
