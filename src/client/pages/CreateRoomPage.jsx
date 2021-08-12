@@ -14,17 +14,17 @@ export default function CreateRoomPage() {
   const [limitValue, setLimitValue] = useState(10);
   const [distanceValue, setDistanceValue] = useState(10);
   const [priceValue, setPriceValue] = useState([1, 2, 3, 4]);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  // const [latitude, setLatitude] = useState(null);
+  // const [longitude, setLongitude] = useState(null);
   // - Hooks - //
   const { createRoom } = useSockets();
-  const { user } = useUser();
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setLatitude(position.coords.latitude);
-      setLongitude(position.coords.longitude);
-    });
-  }, []);
+  const { user, location } = useUser();
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     setLatitude(position.coords.latitude);
+  //     setLongitude(position.coords.longitude);
+  //   });
+  // }, []);
   // - Action Handlers - //
   const handleCreate = () => {
     console.log(location);
@@ -32,7 +32,7 @@ export default function CreateRoomPage() {
       price: priceValue,
       distance: distanceValue,
       limit: limitValue,
-      location: { lat: latitude, long: longitude },
+      location: location,
     });
   };
   return (
