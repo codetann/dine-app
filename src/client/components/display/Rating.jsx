@@ -3,7 +3,6 @@ import { HStack, Box, Text } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 
 export default function Rating({ rating, count }) {
-  console.log(rating);
   return (
     <HStack>
       <Box d="flex" alignItems="center">

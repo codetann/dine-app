@@ -23,7 +23,8 @@ export default function Login() {
 
   // event handler functions
   const handleSignup = () => history.push("/signup");
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     if (!email || !password) return;
 
     await login(email, password);
@@ -59,31 +60,38 @@ export default function Login() {
       </VStack>
 
       {/* Form Section */}
-      <VStack
-        w="100%"
-        bg="white"
-        spacing="2rem"
-        p="2rem"
-        shadow="md"
-        borderRadius=".5rem"
-      >
-        <FormControl id="email">
-          <FormLabel>Email</FormLabel>
-          <Input id="email" type="email" onChange={handleChange} />
-        </FormControl>
-        <FormControl id="password">
-          <FormLabel>Password</FormLabel>
-          <Input id="password" type="password" onChange={handleChange} />
-        </FormControl>
-        <Button
-          isDisabled={!email || !password}
-          onClick={handleLogin}
+
+      <form onSubmit={handleLogin} style={{ width: "100%" }}>
+        <VStack
           w="100%"
-          colorScheme="purple"
+          bg="white"
+          spacing="2rem"
+          p="2rem"
+          shadow="md"
+          borderRadius=".5rem"
         >
-          Sign In
-        </Button>
-        {/* <HStack w="100%" spacing="2rem" justify="center">
+          <FormControl id="email">
+            <FormLabel>Email</FormLabel>
+            <Input id="email" type="email" onChange={handleChange} />
+          </FormControl>
+          <FormControl id="password">
+            <FormLabel>Password</FormLabel>
+            <Input id="password" type="password" onChange={handleChange} />
+          </FormControl>
+          <FormControl>
+            <Button
+              type="submit"
+              isDisabled={!email || !password}
+              w="100%"
+              colorScheme="purple"
+            >
+              Sign In
+            </Button>
+          </FormControl>
+        </VStack>
+      </form>
+
+      {/* <HStack w="100%" spacing="2rem" justify="center">
           <Text fontWeight="500" color={"blackAlpha.700"}>
             or continue with
           </Text>
@@ -93,7 +101,6 @@ export default function Login() {
           <IconButton color="#ea4335" icon={<FaGoogle />} />
           <IconButton color="#1da1f2" icon={<FaTwitter />} />
         </HStack> */}
-      </VStack>
     </VStack>
   );
 }
