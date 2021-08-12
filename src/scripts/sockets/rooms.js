@@ -64,9 +64,7 @@ class Rooms {
     this.rooms = this.rooms.filter((r) => r !== room);
     // remove room details
     this.roomDetails = this.roomDetails.filter((r) => r.room !== room);
-    this.roomDetails.filter((r) => {
-      console.log(r.room, room);
-    });
+    this.roomDetails.filter((r) => {});
     // remove all members
     this.members = this.members.filter((m) => m.room !== rooms);
   }
@@ -74,7 +72,6 @@ class Rooms {
   start(room) {
     // find index of details
     const i = this.roomDetails.findIndex((rd) => rd.room === room);
-    console.log(room, i);
     if (i === -1) throw new Error("Can not find room details");
     // return the correct room details
     return this.roomDetails[i];
@@ -101,7 +98,6 @@ class Rooms {
           if (!m.answers[i]) results[i].no++;
         }
       });
-      console.log(this._sortResults(results));
       return { finished: true, results: this._sortResults(results) };
     } else {
       // run code here when not everyone is done
