@@ -1,8 +1,7 @@
 import axios from "axios";
-import data from "./testData.json";
+import testData from "./testData.json";
 require("dotenv").config();
 
-const baseURL = "https://api.yelp.com/v3/";
 const API_KEY = process.env.YELP_API_KEY;
 
 const _parseBusiness = (data) => {
@@ -13,6 +12,8 @@ const _parseBusiness = (data) => {
       image: d.image_url,
       categories: d.categories,
       price: d.price,
+      rating: d.rating,
+      review_count: d.review_count,
       location: {
         street: d.location.address1,
         city: d.location.city,
@@ -27,20 +28,27 @@ const _parseBusiness = (data) => {
   return businesses;
 };
 
-export const yelpTEST = async () => {
-  // ! ------------------------------------ ! //
-  // const location = "Seattle";
-  // const limit = 10;
-  // const res = await axios.get(
-  //   `https://api.yelp.com/v3/businesses/search?location=${location}&limit=${limit}`,
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${API_KEY}`,
-  //       "Content-type": "application/json",
-  //     },
-  //   }
-  // );
-  // ! ------------------------------------ ! //
-  const businesses = _parseBusiness(data);
-  return businesses;
+export const yelp = async (details) => {
+  console.log(details);
+  // post parameters
+  const { price, distance, limit, location } = details;
+  const { lat, long } = location;
+  const meters = Math.floor(distance * 1609.344);
+  const filter = price.join(", ");
+  // post request to yelp api
+  const res = await axios.get(
+    `https://api.yelp.com/v3/businesses/search?latitude=${lat}&longitude=${long}&radius=${meters}&limit=${limit}`,
+    {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        "Content-type": "application/json",
+      },
+    }
+  );
+  const data = await res.data;
+  return _parseBusiness(data);
+};
+
+export const yelpTest = async () => {
+  return _parseBusiness(testData);
 };
