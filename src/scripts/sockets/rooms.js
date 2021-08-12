@@ -64,7 +64,6 @@ class Rooms {
     this.rooms = this.rooms.filter((r) => r !== room);
     // remove room details
     this.roomDetails = this.roomDetails.filter((r) => r.room !== room);
-    this.roomDetails.filter((r) => {});
     // remove all members
     this.members = this.members.filter((m) => m.room !== rooms);
   }
