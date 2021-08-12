@@ -28,19 +28,20 @@ export default function Business({ business }) {
         shadow="md"
         bg="white"
         cursor="pointer"
+        _hover={{ shadow: "lg", transition: ".2s" }}
       >
         <Image
           src={business.image}
-          boxSize="300px"
+          w="100%"
+          h="300px"
           objectFit="cover"
           shadow="sm"
           borderRadius=".5rem"
         />
         <VStack w="100%" align="left">
           <HStack spacing="1rem">
-            {business.categories.map((b, i) => (
-              <Tag key={i}>{b.title}</Tag>
-            ))}
+            {business?.categories &&
+              business.categories.map((b, i) => <Tag key={i}>{b.title}</Tag>)}
           </HStack>
           <Heading fontWeight="medium" textAlign="left" size="sm">
             {business.name}

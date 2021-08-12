@@ -8,6 +8,7 @@ import useGame from "./useGame";
 import useFinish from "./useFinish";
 import useTesting from "./useTesting";
 import useReadOnly from "./useReadOnly";
+import useFavorites from "./useFavorites";
 
 export {
   useLogin,
@@ -20,4 +21,5 @@ export {
   useFinish,
   useTesting,
   useReadOnly,
+  useFavorites,
 };

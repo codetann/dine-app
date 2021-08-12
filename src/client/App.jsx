@@ -16,6 +16,7 @@ import CreateRoomPage from "./pages/CreateRoomPage";
 import WaitingPage from "./pages/WaitingPage";
 import GamePage from "./pages/GamePage";
 import FinishPage from "./pages/FinishPage";
+import FavoritesPage from "./pages/FavoritesPage";
 
 /**
  * TODO | socket.io
@@ -40,6 +41,7 @@ export default function App() {
           <PrivateRoute path="/game" component={GamePage} />
           <PrivateRoute path="/finished" component={FinishPage} />
           <PrivateRoute path="/nearby" component={NearbyPage} />
+          <PrivateRoute path="/favorites" component={FavoritesPage} />
         </Switch>
       </Router>
     </VStack>

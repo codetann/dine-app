@@ -17,6 +17,7 @@ export default function StoreProvider({ children }) {
   const [gameData, setGameData] = useState(null);
   const [results, setResults] = useState(null);
   const [nearby, setNearby] = useState(null);
+  const [favorites, setFavorites] = useState(null);
   const [error, setError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [isAuth, setIsAuth] = useState(null);
@@ -27,6 +28,22 @@ export default function StoreProvider({ children }) {
   const initializeSocket = useSetup();
   // - Derived State - //
   const location = { lat: latitude, long: longitude };
+
+  const fetchFavorites = async () => {
+    try {
+      const res = await axios.post("http://localhost:8050/api/favorites", {
+        id: user.id,
+      });
+      const json = res.data;
+      setFavorites(json);
+      console.log(json);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => {
+        setError(null);
+      }, 1000);
+    }
+  };
 
   // initialize sockets on login/signup
   useEffect(() => {
@@ -48,6 +65,7 @@ export default function StoreProvider({ children }) {
         setGameData,
         setResults
       );
+      fetchFavorites();
     }
   }, [socket]);
 
@@ -96,6 +114,8 @@ export default function StoreProvider({ children }) {
     results,
     location,
     nearby,
+    favorites,
+    setFavorites,
   };
 
   return (

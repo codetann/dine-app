@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   HStack,
   VStack,
@@ -16,10 +16,15 @@ import {
   ModalFooter,
   Tag,
 } from "@chakra-ui/react";
-import { FaMapMarkerAlt, FaPhone, FaRegHeart } from "react-icons/fa";
+import { FaMapMarkerAlt, FaPhone, FaRegHeart, FaHeart } from "react-icons/fa";
 import Rating from "../display/Rating";
+import { useFavorites } from "../../hooks";
 
 export default function BusinessModal({ business, isOpen, onClose }) {
+  const id = business?.yelp_id || business?.id;
+  const { addFavorite, favorites } = useFavorites();
+  const favorite = favorites && favorites.find((f) => f.yelp_id === id);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -40,19 +45,20 @@ export default function BusinessModal({ business, isOpen, onClose }) {
             />
             <VStack w="100%" align="left">
               <HStack spacing="1rem">
-                {business.categories.map((b, i) => (
-                  <Tag key={i}>{b.title}</Tag>
-                ))}
+                {business?.categories &&
+                  business.categories.map((b, i) => (
+                    <Tag key={i}>{b.title}</Tag>
+                  ))}
               </HStack>
               <Heading size="md">{business.name}</Heading>
               {/* info w/ icons */}
               <HStack color="blackAlpha.600">
                 <FaMapMarkerAlt />
-                <Text>{business.location.address}</Text>
+                <Text>{business?.location?.address || business.address}</Text>
               </HStack>
               <HStack color="blackAlpha.600">
                 <FaPhone />
-                <Text>{business.phone.display}</Text>
+                <Text>{business.phone?.display || business.display_phone}</Text>
               </HStack>
               <HStack spacing="1rem">
                 <p>{business.price}</p>
@@ -67,7 +73,16 @@ export default function BusinessModal({ business, isOpen, onClose }) {
         {/* modal footer */}
         <ModalFooter>
           <HStack pb="1rem">
-            <IconButton icon={<FaRegHeart />} />
+            <IconButton
+              color="red"
+              onClick={() =>
+                addFavorite(
+                  favorite ? favorite : business,
+                  favorite ? "remove" : "add"
+                )
+              }
+              icon={favorite ? <FaHeart /> : <FaRegHeart />}
+            />
             <Button colorScheme="purple">Open In Maps</Button>
           </HStack>
         </ModalFooter>
