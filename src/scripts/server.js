@@ -34,7 +34,6 @@ const io = socket(server, {
     origins: ["http://localhost:8050"],
   },
 });
-
 socketio(io);
 
 // routes

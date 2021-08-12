@@ -1,4 +1,4 @@
-import { yelp, yelpTest } from "../api/yelp";
+import yelp from "../api/yelp";
 
 // TODO: on quit, room details are not being removed.
 
@@ -28,7 +28,7 @@ class Rooms {
   async create(id, name, details) {
     const room = this._createRoomId();
     // set data from yelp api
-    const businesses = await yelpTest(details);
+    const businesses = await yelp.test(details);
     // set room / details / members
     this.rooms = [...this.rooms, room];
     this.roomDetails = [...this.roomDetails, { room, businesses }];
