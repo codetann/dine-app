@@ -12,13 +12,14 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { FaHamburger } from "react-icons/fa";
-import { useLogin } from "../../hooks";
+import { useLogin, useTesting } from "../../hooks";
 
 export default function Login() {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const login = useLogin();
+  const { testLogin } = useTesting();
 
   // event handler functions
   const handleSignup = () => history.push("/signup");
@@ -40,6 +41,7 @@ export default function Login() {
       {/* Info Section */}
       <HStack spacing="1rem">
         <IconButton
+          onClick={() => testLogin()}
           color="purple.600"
           fontSize="1.5rem"
           icon={<FaHamburger />}
