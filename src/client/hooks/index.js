@@ -5,6 +5,8 @@ import useUpdate from "./useUpdate";
 import useUser from "./useUser";
 import useLogout from "./useLogout";
 import useGame from "./useGame";
+import useFinish from "./useFinish";
+import useTesting from "./useTesting";
 
 export {
   useLogin,
@@ -14,4 +16,6 @@ export {
   useUser,
   useLogout,
   useGame,
+  useFinish,
+  useTesting,
 };

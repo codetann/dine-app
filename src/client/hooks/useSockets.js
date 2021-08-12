@@ -5,8 +5,9 @@ import { useHistory } from "react-router-dom";
 
 const useSockets = () => {
   const history = useHistory();
-  const { socket, members, error, room, gameData } = useStore();
+  const { socket, members, error, room, gameData, results } = useStore();
 
+  // send all users to the game when gameData is loaded
   useEffect(() => {
     if (gameData) history.push("/game");
   }, [gameData]);
@@ -45,6 +46,7 @@ const useSockets = () => {
     room,
     gameData,
     endGame,
+    results,
   };
 };
 

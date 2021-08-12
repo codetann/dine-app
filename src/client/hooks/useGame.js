@@ -11,7 +11,9 @@ export default function useGame() {
 
   // send user to the finished page when everyone is done
   useEffect(() => {
-    if (results) history.push("/finished");
+    if (results) {
+      history.push("/finished");
+    }
   }, [results]);
 
   useEffect(() => {
@@ -34,5 +36,12 @@ export default function useGame() {
   // current business info
   const currentBusiness = gameData?.businesses[index];
 
-  return { answerYes, answerNo, currentBusiness, isFinished, answers };
+  return {
+    answerYes,
+    answerNo,
+    currentBusiness,
+    isFinished,
+    answers,
+    counter: index,
+  };
 }
